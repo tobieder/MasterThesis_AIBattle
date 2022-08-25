@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 public class CoverSpot : MonoBehaviour
 {
@@ -107,4 +108,5 @@ public class CoverSpot : MonoBehaviour
 
         return true;
     }
+
 }

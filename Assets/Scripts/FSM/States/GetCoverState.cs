@@ -16,16 +16,6 @@ public class GetCoverState : State
             CoverManager.Instance.ExitCover(m_SoldierData.GetCurrentCoverSpot());
         }
 
-        /*
-        CoverSpot coverSpot = CoverManager.Instance.GetCoverForEnemy(
-            m_SoldierData,
-            m_SoldierData.GetTarget().transform.position,
-            m_SoldierData.GetMaxAttackDistance(),
-            m_SoldierData.GetMinAttackDistance(),
-            m_SoldierData.GetCurrentCoverSpot()
-            );
-        */
-
         // Getting a cover spot for the 3 closes enemies
         // TODO: make changable by skill
         CoverSpot coverSpot = CoverManager.Instance.GetCoverForClosestEnemies(

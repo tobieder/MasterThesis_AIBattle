@@ -15,6 +15,7 @@ public class SoldierController : MonoBehaviour
     // Controllers
     // Finite State Machine
     StateManager m_StateManager;
+    GroupAIManager m_GroupAIManager;
     [SerializeField]
     GroupAI m_GroupAI;
 
@@ -23,6 +24,7 @@ public class SoldierController : MonoBehaviour
         m_GroupAI.RegisterSoldier(GetComponent<Soldier>());
 
         m_StateManager = GetComponent<StateManager>();
+        m_GroupAIManager = GetComponent<GroupAIManager>();
     }
 
     public void RunSoldierController()
@@ -33,6 +35,7 @@ public class SoldierController : MonoBehaviour
                 m_StateManager.RunStateMachine();
                 break;
             case Controller.GroupAI:
+                m_GroupAIManager.Run();
                 break;
             case Controller.STOP:
                 break;
@@ -42,5 +45,10 @@ public class SoldierController : MonoBehaviour
     public void SetControlMethod(Controller _controlMethod)
     {
         m_Controller = _controlMethod;
+    }
+
+    private void OnDestroy()
+    {
+        m_GroupAI.DeregisterSoldier(GetComponent<Soldier>());
     }
 }

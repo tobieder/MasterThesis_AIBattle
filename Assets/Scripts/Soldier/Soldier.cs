@@ -27,6 +27,9 @@ public class Soldier : MonoBehaviour
     public Transform m_Eyes;
 
     // Internal
+    private Vector3 m_PreviousPosition;
+    private float m_Velocity;
+
     private Animator m_Animator;
     private NavMeshAgent m_NavMeshAgent;
 
@@ -76,8 +79,12 @@ public class Soldier : MonoBehaviour
                 }
             }
 
-            // Run selected Controller
+            // Calculate current velocity
+            Vector3 lastFrameMovement = transform.position - m_PreviousPosition;
+            m_Velocity = lastFrameMovement.magnitude / Time.deltaTime;
+            m_PreviousPosition = transform.position;
 
+            // Run selected Controller
             // ----- Update State Machine -----
             m_SoldierController.RunSoldierController();
 
@@ -257,10 +264,41 @@ public class Soldier : MonoBehaviour
         }
     }
 
+    public bool IsInCover()
+    {
+        if(m_CurrentCover != null)
+        {
+            if(m_CurrentCover.IsOccupied() && Vector3.Distance(transform.position, m_CurrentCover.transform.position) < 1.0f)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     // ----- ANIMATION CONTROLLER -----
     public void SetWalkAnimation(bool _state)
     {
         m_Animator.SetBool("move", _state);
+    }
+
+    public void SetCrouchAnimation(bool _state)
+    {
+        CapsuleCollider capsuleCollider = GetComponent<CapsuleCollider>();
+        // scale collider to animation
+        if(_state == true)
+        {
+            capsuleCollider.center = new Vector3(0.0f, 0.89f, 0.0f);
+            capsuleCollider.height = 1.77f;
+        }
+        else
+        {
+            capsuleCollider.center = new Vector3(0.0f, 1.29f, 0.0f);
+            capsuleCollider.height = 2.58f;
+        }
+
+        m_Animator.SetBool("crouch", _state);
     }
 
     public void TriggerShotAnimation()
@@ -339,6 +377,11 @@ public class Soldier : MonoBehaviour
         return m_Target;
     }
 
+    public void SetTarget(Soldier _target)
+    {
+        m_Target = _target;
+    }
+
     public CoverSpot GetCurrentCoverSpot()
     {
         return m_CurrentCover;
@@ -348,6 +391,11 @@ public class Soldier : MonoBehaviour
     public void SetCurrentCoverSpot(CoverSpot _coverSpot)
     {
         m_CurrentCover = _coverSpot;
+    }
+
+    public float GetVelocity()
+    {
+        return m_Velocity;
     }
 
     public bool ReadyToChangeCover()

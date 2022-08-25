@@ -91,6 +91,18 @@ public class CoverManager : MonoBehaviour
         return bestCover;
     }
 
+    public CoverSpot GetCoverForClosestEnemies(Soldier _soldier, Soldier[] _enemies, float _maxAttackDistance, float _minAttackDistance, CoverSpot _prevCoverSpot)
+    {
+        Vector3[] enemyPositions = new Vector3[_enemies.Length];
+
+        for (int i = 0; i < _enemies.Length; i++)
+        {
+            enemyPositions[i] = _enemies[i].transform.position;
+        }
+
+        return GetCoverForClosestEnemies(_soldier, enemyPositions, _maxAttackDistance, _minAttackDistance, _prevCoverSpot);
+    }
+
     public CoverSpot GetCoverForClosestEnemies(Soldier _soldier, Vector3[] _enemyPositions, float _maxAttackDistance, float _minAttackDistance, CoverSpot _prevCoverSpot)
     {
         CoverSpot bestCover = null;
