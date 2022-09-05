@@ -16,7 +16,7 @@ public class CoverManager : MonoBehaviour
     {
         if (_instance != null && _instance != this)
         {
-            Debug.LogError("Influence Map Control destroyed.");
+            Debug.LogError("Cover Manager destroyed.");
             Destroy(this.gameObject);
         }
         else
@@ -84,6 +84,7 @@ public class CoverManager : MonoBehaviour
 
         if (bestCover != null)
         {
+            ExitCover(_soldier.GetCurrentCoverSpot());
             bestCover.SetOccupier(_soldier.transform);
             AddToOccupied(bestCover);
         }

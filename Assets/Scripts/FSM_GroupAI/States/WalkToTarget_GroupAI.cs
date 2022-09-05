@@ -15,7 +15,11 @@ public class WalkToTarget_GroupAI : GroupAIState
         if(m_WalkTarget != m_SoldierData.GetWalkTarget())
         {
             m_WalkTarget = m_SoldierData.GetWalkTarget();
-            m_SoldierData.GetNavMeshAgent().SetDestination(m_WalkTarget);
+            
+            if(!m_SoldierData.GetNavMeshAgent().SetDestination(m_WalkTarget))
+            {
+                Debug.LogWarning("No path found.");
+            }
         }
 
         Vector3 distanceToDestination = transform.position - m_WalkTarget;

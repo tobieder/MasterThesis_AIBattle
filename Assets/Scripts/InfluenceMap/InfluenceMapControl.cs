@@ -27,6 +27,8 @@ public class InfluenceMapControl : MonoBehaviour
     [SerializeField]
     GridDisplay m_GridDisplay;
 
+    public string m_InfluenceMapFileName;
+
     private void Awake()
     {
         if(_instance != null && _instance != this)
@@ -50,7 +52,6 @@ public class InfluenceMapControl : MonoBehaviour
         m_InfluenceMap.Momentum = m_Momentum;
 
         // DEBUG: Allow to change Influence by User Input
-        /*
         Ray mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit mouseHit;
         if (Physics.Raycast(mouseRay, out mouseHit) && Input.GetMouseButton(0) || Input.GetMouseButton(1))
@@ -69,7 +70,6 @@ public class InfluenceMapControl : MonoBehaviour
                 }
             }
         }
-        */
     }
 
     void CreateMap()
@@ -79,7 +79,16 @@ public class InfluenceMapControl : MonoBehaviour
 
         //Debug.Log(width + " x " + height);
 
-        m_InfluenceMap = new InfluenceMap(width, height, m_Decay, m_Momentum);
+        if(System.IO.File.Exists("./Assets/InfluenceMapData/" + m_InfluenceMapFileName))
+        {
+            Debug.Log("File found.");
+            SaveLoadArray sla = new SaveLoadArray();
+            m_InfluenceMap = new InfluenceMap(sla.LoadLastInfluenceMap("./Assets/InfluenceMapData/" + m_InfluenceMapFileName), m_Decay, m_Momentum);
+        } else
+        {
+            Debug.Log("No file found.");
+            m_InfluenceMap = new InfluenceMap(width, height, m_Decay, m_Momentum);
+        }
 
         m_GridDisplay.SetGridData(m_InfluenceMap);
         m_GridDisplay.CreateMesh(m_BottomLeft.position, m_GridSize);
@@ -138,5 +147,129 @@ public class InfluenceMapControl : MonoBehaviour
     public float[,] GetInfluenceMap()
     {
         return m_InfluenceMap.GetInfluenceMap();
+    }
+
+    public float GetInfluence(int _x, int _y)
+    {
+        return m_InfluenceMap.GetValue(_x, _y);
+    }
+    
+    public int[,] GetLastInfluenceMap()
+    {
+        return m_InfluenceMap.GetLastInfluenceMap();
+    }
+
+    public float GetLastInfluence(int _x, int _y)
+    {
+        return m_InfluenceMap.GetLastInfluenceValue(_x, _y);
+    }
+
+    // Returns average last influence value of specified area
+    public float GetLastInfluenceInArea(int _x, int _y, Vector2 size)
+    {
+        int counter = 0;
+        float value = 0;
+
+        for(int x = _x; x < _x + size.x; x++)
+        {
+            for(int y = _y; y < _y + size.y; y++)
+            {
+                /*
+                float lastInfluente = GetLastInfluence(x, y);
+                if(lastInfluente > 0)
+                {
+                    posValues++;
+                }
+                else if(lastInfluente < 0)
+                {
+                    negValues++;
+                }
+                */
+
+                //m_InfluenceMap.SetLastInfluence(x, y, 1);
+
+                value += GetLastInfluence(x, y);
+                counter++;
+            }
+
+        }
+
+        /*
+        if(posValues > counter/2.0f)
+        {
+            return (float)posValues / (float)counter;
+        }
+        else if(negValues > counter / 2.0f)
+        {
+            return (float)negValues/ (float)counter;
+        }
+        else
+        {
+            return 0;
+        }
+        */
+        return value / (float)counter;
+    }
+
+    public bool AreAllValuesTheSame()
+    {
+        int value = m_InfluenceMap.GetLastInfluenceValue(0, 0);
+        for (int x = 0; x < m_InfluenceMap.Width; ++x)
+        {
+            for (int y = 0; y < m_InfluenceMap.Height; ++y)
+            {
+                if(m_InfluenceMap.GetLastInfluenceValue(x, y) != value)
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    public Vector2 GetClosestUnclaimedOrEnemyClaimed(Vector2 _position, float _value)
+    {
+        float currentClosestDistance = float.PositiveInfinity;
+        Vector2 currentClosestPosition = _position;
+
+        if(_value > 0.0)
+        {
+            for (int x = 0; x < m_InfluenceMap.Width; ++x)
+            {
+                for (int y = 0; y < m_InfluenceMap.Height; ++y)
+                {
+                    if (GetLastInfluence(x, y) <= 0f)
+                    {
+                        float currentDistance = Vector2.Distance(_position, new Vector2(transform.position.x, transform.position.z) + new Vector2(x, y));
+                        if (currentDistance < currentClosestDistance)
+                        {
+                            currentClosestPosition = new Vector2(transform.position.x, transform.position.z) + new Vector2(x, y);
+                            currentClosestDistance = currentDistance;
+                        }
+                    }
+                }
+            }
+        }
+        else
+        {
+            for (int x = 0; x < m_InfluenceMap.Width; ++x)
+            {
+                for (int y = 0; y < m_InfluenceMap.Height; ++y)
+                {
+                    if (GetLastInfluence(x, y) >= 0f)
+                    {
+                        float currentDistance = Vector2.Distance(_position, new Vector2(transform.position.x, transform.position.z) + new Vector2(x, y));
+                        if (currentDistance < currentClosestDistance)
+                        {
+                            currentClosestPosition = new Vector2(transform.position.x, transform.position.z) + new Vector2(x, y);
+                            currentClosestDistance = currentDistance;
+                        }
+                    }
+                }
+            }
+        }
+
+        return currentClosestPosition;
     }
 }

@@ -7,6 +7,13 @@ public class Attack_GroupAI : GroupAIState
     public Idle_GroupAI m_IdleState;
     public Wait_GroupAI m_WaitState;
 
+    GroupAIState m_NextState;
+
+    private void Start()
+    {
+        m_NextState = m_IdleState;
+    }
+
     public override GroupAIState RunCurrentState()
     {
         Soldier target = m_SoldierData.GetTarget();
@@ -60,8 +67,13 @@ public class Attack_GroupAI : GroupAIState
 
         m_SoldierData.ResetFireCooldown();
 
-        m_WaitState.SetNextState(m_IdleState);
+        m_WaitState.SetNextState(m_NextState);
         m_WaitState.SetTimer(0.5f);
         return m_WaitState;
+    }
+
+    public void SetNextState(GroupAIState _nextState)
+    {
+        m_NextState = _nextState;
     }
 }

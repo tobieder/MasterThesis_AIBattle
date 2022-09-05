@@ -382,7 +382,7 @@ PrefabInstance:
     - target: {fileID: 2391679035919627156, guid: c5a419433da27c14589cc69a1d251d90,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2391679035919627158, guid: c5a419433da27c14589cc69a1d251d90,
         type: 3}
@@ -563,6 +563,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_DamageDealt
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6316274881438699139, guid: c5a419433da27c14589cc69a1d251d90,
+        type: 3}
+      propertyPath: m_ViewDistance
+      value: 35
+      objectReference: {fileID: 0}
+    - target: {fileID: 6316274881438699139, guid: c5a419433da27c14589cc69a1d251d90,
+        type: 3}
+      propertyPath: m_MinAttackDistance
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6316274881438699197, guid: c5a419433da27c14589cc69a1d251d90,
         type: 3}
@@ -1544,13 +1554,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: Soldier_Team_1
       objectReference: {fileID: 0}
+    - target: {fileID: 106200, guid: fd314a990a4ba9f4fa51355aed8d7926, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 442412, guid: fd314a990a4ba9f4fa51355aed8d7926, type: 3}
       propertyPath: m_RootOrder
       value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 442412, guid: fd314a990a4ba9f4fa51355aed8d7926, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3.983861
+      value: -17.56
       objectReference: {fileID: 0}
     - target: {fileID: 442412, guid: fd314a990a4ba9f4fa51355aed8d7926, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1558,11 +1572,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 442412, guid: fd314a990a4ba9f4fa51355aed8d7926, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 12.648842
+      value: -16.53
       objectReference: {fileID: 0}
     - target: {fileID: 442412, guid: fd314a990a4ba9f4fa51355aed8d7926, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.58778536
       objectReference: {fileID: 0}
     - target: {fileID: 442412, guid: fd314a990a4ba9f4fa51355aed8d7926, type: 3}
       propertyPath: m_LocalRotation.x
@@ -1570,7 +1584,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 442412, guid: fd314a990a4ba9f4fa51355aed8d7926, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0.80901694
       objectReference: {fileID: 0}
     - target: {fileID: 442412, guid: fd314a990a4ba9f4fa51355aed8d7926, type: 3}
       propertyPath: m_LocalRotation.z
@@ -1582,11 +1596,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 442412, guid: fd314a990a4ba9f4fa51355aed8d7926, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: -108
       objectReference: {fileID: 0}
     - target: {fileID: 442412, guid: fd314a990a4ba9f4fa51355aed8d7926, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1487408004621434564, guid: fd314a990a4ba9f4fa51355aed8d7926,
+        type: 3}
+      propertyPath: m_Value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6810330326170904945, guid: fd314a990a4ba9f4fa51355aed8d7926,
+        type: 3}
+      propertyPath: m_ViewDistance
+      value: 35
+      objectReference: {fileID: 0}
+    - target: {fileID: 6810330326170904945, guid: fd314a990a4ba9f4fa51355aed8d7926,
+        type: 3}
+      propertyPath: m_MaxAttackDistance
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 6810330326170904945, guid: fd314a990a4ba9f4fa51355aed8d7926,
+        type: 3}
+      propertyPath: m_MinAttackDistance
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7375241826846604197, guid: fd314a990a4ba9f4fa51355aed8d7926,
         type: 3}
@@ -2001,7 +2035,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &650384861
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2173,7 +2207,7 @@ PrefabInstance:
     - target: {fileID: 2391679035919627156, guid: c5a419433da27c14589cc69a1d251d90,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2391679035919627158, guid: c5a419433da27c14589cc69a1d251d90,
         type: 3}
@@ -2350,6 +2384,16 @@ PrefabInstance:
       propertyPath: m_DamageDealt
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 6316274881438699139, guid: c5a419433da27c14589cc69a1d251d90,
+        type: 3}
+      propertyPath: m_ViewDistance
+      value: 35
+      objectReference: {fileID: 0}
+    - target: {fileID: 6316274881438699139, guid: c5a419433da27c14589cc69a1d251d90,
+        type: 3}
+      propertyPath: m_MinAttackDistance
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 6316274881438699197, guid: c5a419433da27c14589cc69a1d251d90,
         type: 3}
       propertyPath: m_Value
@@ -2397,6 +2441,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39d0e7be2069a3e42a40369f4e0bc76d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_GridDisplayMode: 1
   m_Material: {fileID: 2100000, guid: 748fe90dd4efe33439f5e032825718b1, type: 2}
   m_NeutralColor: {r: 1, g: 1, b: 1, a: 1}
   m_PositiveColor: {r: 1, g: 0, b: 0, a: 1}
@@ -2439,6 +2484,7 @@ MonoBehaviour:
   m_Momentum: 0.8
   m_UpdateFrequency: 10
   m_GridDisplay: {fileID: 764771102}
+  m_InfluenceMapFileName: 
 --- !u!114 &781366404 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8075042801519000410, guid: c5a419433da27c14589cc69a1d251d90,
@@ -2699,7 +2745,7 @@ PrefabInstance:
     - target: {fileID: 2391679035919627156, guid: c5a419433da27c14589cc69a1d251d90,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2391679035919627158, guid: c5a419433da27c14589cc69a1d251d90,
         type: 3}
@@ -2875,6 +2921,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_DamageDealt
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6316274881438699139, guid: c5a419433da27c14589cc69a1d251d90,
+        type: 3}
+      propertyPath: m_ViewDistance
+      value: 35
+      objectReference: {fileID: 0}
+    - target: {fileID: 6316274881438699139, guid: c5a419433da27c14589cc69a1d251d90,
+        type: 3}
+      propertyPath: m_MinAttackDistance
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6316274881438699197, guid: c5a419433da27c14589cc69a1d251d90,
         type: 3}
@@ -3738,7 +3794,7 @@ PrefabInstance:
     - target: {fileID: 2391679035919627156, guid: c5a419433da27c14589cc69a1d251d90,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2391679035919627158, guid: c5a419433da27c14589cc69a1d251d90,
         type: 3}
@@ -3919,6 +3975,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_DamageDealt
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6316274881438699139, guid: c5a419433da27c14589cc69a1d251d90,
+        type: 3}
+      propertyPath: m_ViewDistance
+      value: 35
+      objectReference: {fileID: 0}
+    - target: {fileID: 6316274881438699139, guid: c5a419433da27c14589cc69a1d251d90,
+        type: 3}
+      propertyPath: m_MinAttackDistance
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6316274881438699197, guid: c5a419433da27c14589cc69a1d251d90,
         type: 3}
@@ -4128,6 +4194,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1276402932781817393, guid: c5a419433da27c14589cc69a1d251d90,
+        type: 3}
+      propertyPath: m_MaxHealth
+      value: 250
+      objectReference: {fileID: 0}
     - target: {fileID: 2391679035919527924, guid: c5a419433da27c14589cc69a1d251d90,
         type: 3}
       propertyPath: m_RootOrder
@@ -4136,7 +4207,7 @@ PrefabInstance:
     - target: {fileID: 2391679035919527924, guid: c5a419433da27c14589cc69a1d251d90,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 4.8577633
+      value: 2.99
       objectReference: {fileID: 0}
     - target: {fileID: 2391679035919527924, guid: c5a419433da27c14589cc69a1d251d90,
         type: 3}
@@ -4146,7 +4217,7 @@ PrefabInstance:
     - target: {fileID: 2391679035919527924, guid: c5a419433da27c14589cc69a1d251d90,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 10.135338
+      value: 7.26
       objectReference: {fileID: 0}
     - target: {fileID: 2391679035919527924, guid: c5a419433da27c14589cc69a1d251d90,
         type: 3}
@@ -4427,6 +4498,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_DamageDealt
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6316274881438699139, guid: c5a419433da27c14589cc69a1d251d90,
+        type: 3}
+      propertyPath: m_ViewDistance
+      value: 35
+      objectReference: {fileID: 0}
+    - target: {fileID: 6316274881438699139, guid: c5a419433da27c14589cc69a1d251d90,
+        type: 3}
+      propertyPath: m_MinAttackDistance
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6316274881438699197, guid: c5a419433da27c14589cc69a1d251d90,
         type: 3}
@@ -6053,7 +6134,7 @@ PrefabInstance:
     - target: {fileID: 2391679035919527924, guid: c5a419433da27c14589cc69a1d251d90,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -4
+      value: -10.93
       objectReference: {fileID: 0}
     - target: {fileID: 2391679035919527924, guid: c5a419433da27c14589cc69a1d251d90,
         type: 3}
@@ -6063,7 +6144,7 @@ PrefabInstance:
     - target: {fileID: 2391679035919527924, guid: c5a419433da27c14589cc69a1d251d90,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 6
+      value: -19.85
       objectReference: {fileID: 0}
     - target: {fileID: 2391679035919527924, guid: c5a419433da27c14589cc69a1d251d90,
         type: 3}
@@ -6163,7 +6244,7 @@ PrefabInstance:
     - target: {fileID: 2391679035919627156, guid: c5a419433da27c14589cc69a1d251d90,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2391679035919627158, guid: c5a419433da27c14589cc69a1d251d90,
         type: 3}
@@ -6339,6 +6420,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_DamageDealt
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6316274881438699139, guid: c5a419433da27c14589cc69a1d251d90,
+        type: 3}
+      propertyPath: m_ViewDistance
+      value: 35
+      objectReference: {fileID: 0}
+    - target: {fileID: 6316274881438699139, guid: c5a419433da27c14589cc69a1d251d90,
+        type: 3}
+      propertyPath: m_MinAttackDistance
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6316274881438699197, guid: c5a419433da27c14589cc69a1d251d90,
         type: 3}

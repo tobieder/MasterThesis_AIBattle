@@ -3,6 +3,7 @@ using UnityEditor;
 using Unity.EditorCoroutines.Editor;
 using System.Collections;
 using UnityEngine.AI;
+using Microsoft.Win32;
 
 [CustomEditor(typeof(GroupAI))]
 public class GroupAIEditor : Editor
@@ -50,19 +51,25 @@ public class GroupAIEditor : Editor
         {
             GUILayout.Label(soldier.name, EditorStyles.boldLabel);
 
+            if(GUILayout.Button("Get closest POI."))
+            {
+                Debug.Log(POIManager.Instance.GetClosestUnoccupiedPOI(soldier.transform.position).name);
+            }
+
             if(GUILayout.Button("Move To Random Position"))
             {
                 Vector3 bottomLeft = InfluenceMapControl.Instance.GetBottomLeft();
                 Vector3 topRight = InfluenceMapControl.Instance.GetTopRight();
-
-                float randomX = Random.Range(bottomLeft.x, topRight.x);
-                float randomZ = Random.Range(bottomLeft.z, topRight.z);
-
-                Vector3 walkTarget = new Vector3(randomX, soldier.transform.position.y, randomZ);
-
-                NavMeshHit hit;
                 while(true)
                 {
+
+                    float randomX = Random.Range(bottomLeft.x, topRight.x);
+                    float randomZ = Random.Range(bottomLeft.z, topRight.z);
+
+                    Vector3 walkTarget = new Vector3(randomX, soldier.transform.position.y, randomZ);
+
+                    NavMeshHit hit;
+
                     if (NavMesh.SamplePosition(walkTarget, out hit, 0.5f, NavMesh.AllAreas))
                     {
                         groupAI.SetWalkTarget(soldier, walkTarget);
@@ -71,7 +78,15 @@ public class GroupAIEditor : Editor
                 }
             }
 
-            if(GUILayout.Button("Register To Formation."))
+            if (GUILayout.Button("Move To closest enemy or unclaimed position"))
+            {
+                Vector2 walkTarget = InfluenceMapControl.Instance.GetClosestUnclaimedOrEnemyClaimed(new Vector2(soldier.transform.position.x, soldier.transform.position.z), soldier.GetComponent<Propagator>().Value);
+                Debug.Log(soldier.GetComponent<Propagator>().Value);
+                Debug.Log(soldier.transform.position + " -> " + walkTarget);
+                groupAI.SetWalkTarget(soldier, new Vector3(walkTarget.x, 0.0f, walkTarget.y));
+            }
+
+            if (GUILayout.Button("Register To Formation."))
             {
                 if(groupAI.m_CurrentFormation != null)
                 {

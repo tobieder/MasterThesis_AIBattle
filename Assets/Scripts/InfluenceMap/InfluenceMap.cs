@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 public struct Vector2I
 {
@@ -29,6 +30,7 @@ public class InfluenceMap : GridData
 
     float[,] m_Influences;
     float[,] m_InfluencesBuffer;
+    int[,] m_LastInfluence;
 
     public float Decay { get; set; }
     public float Momentum { get; set; }
@@ -45,10 +47,21 @@ public class InfluenceMap : GridData
         return m_Influences;
     }
 
+    public int GetLastInfluenceValue(int _x, int _y)
+    {
+        return m_LastInfluence[_x, _y];
+    }
+
+    public int[,] GetLastInfluenceMap()
+    {
+        return m_LastInfluence;
+    }
+
     public InfluenceMap(int _size, float _decay, float _momentum)
     {
         m_Influences = new float[_size, _size];
         m_InfluencesBuffer = new float[_size, _size];
+        m_LastInfluence = new int[_size, _size];
         Decay = _decay;
         Momentum = _momentum;
     }
@@ -57,6 +70,25 @@ public class InfluenceMap : GridData
     {
         m_Influences = new float[_width, _height];
         m_InfluencesBuffer = new float[_width, _height];
+        m_LastInfluence = new int[_width, _height];
+        Decay = _decay;
+        Momentum = _momentum;
+    }
+
+    public InfluenceMap(float[,] _influences, float _decay, float _momentum)
+    {
+        m_Influences = _influences;
+        m_InfluencesBuffer = _influences;
+        m_LastInfluence = new int[_influences.GetLength(0), _influences.GetLength(1)];
+        Decay = _decay;
+        Momentum = _momentum;
+    }
+
+    public InfluenceMap(int[,] _lastInfluences, float _decay, float _momentum)
+    {
+        m_LastInfluence = _lastInfluences;
+        m_Influences = new float[_lastInfluences.GetLength(0), _lastInfluences.GetLength(1)];
+        m_InfluencesBuffer = new float[_lastInfluences.GetLength(0), _lastInfluences.GetLength(1)];
         Decay = _decay;
         Momentum = _momentum;
     }
@@ -67,6 +99,7 @@ public class InfluenceMap : GridData
         {
             m_Influences[_x, _y] = _value;
             m_InfluencesBuffer[_x, _y] = _value;
+            m_LastInfluence[_x, _y] = (int)Mathf.Sign(_value);
         }
     }
 
@@ -76,6 +109,23 @@ public class InfluenceMap : GridData
         {
             m_Influences[_position.x, _position.y] = _value;
             m_InfluencesBuffer[_position.x, _position.y] = _value;
+            m_LastInfluence[_position.x, _position.y] = (int)Mathf.Sign(_value);
+        }
+    }
+
+    public void SetLastInfluence(Vector2I _position, int _value)
+    {
+        if(_position.x < Width && _position.y < Height)
+        {
+            m_LastInfluence[_position.x, _position.y] = _value;
+        }
+    }
+
+    public void SetLastInfluence(int _x, int _y, int _value)
+    {
+        if (_x < Width && _y < Height)
+        {
+            m_LastInfluence[_x, _y] = _value;
         }
     }
 
@@ -121,28 +171,34 @@ public class InfluenceMap : GridData
                     minInfluence = Mathf.Min(influence, minInfluence);
                 }
 
-                if (m_Influences[x, y] > 0.9)
-                {
-                    m_Influences[x, y] = 0.9f;
-                }
-                else if (m_Influences[x, y] < -0.9f)
-                {
-                    m_Influences[x, y] = -0.9f;
-                }
-
                 if (Mathf.Abs(minInfluence) > maxInfluence)
                 {
+                    /*
                     if(Mathf.Abs(minInfluence) > Mathf.Abs(m_InfluencesBuffer[x, y]) || minInfluence < m_InfluencesBuffer[x, y])
                     {
                         m_Influences[x, y] = Mathf.Lerp(m_InfluencesBuffer[x, y], minInfluence, Momentum);
                     }
+                    */
+                    m_Influences[x, y] = Mathf.Lerp(m_InfluencesBuffer[x, y], minInfluence, Momentum);
                 }
-                else
+                else if(Mathf.Abs(minInfluence) < maxInfluence)
                 {
+                    /*
                     if (Mathf.Abs(maxInfluence) > Mathf.Abs(m_InfluencesBuffer[x, y]) || maxInfluence > m_InfluencesBuffer[x, y])
                     {
                         m_Influences[x, y] = Mathf.Lerp(m_InfluencesBuffer[x, y], maxInfluence, Momentum);
                     }
+                    */
+                    m_Influences[x, y] = Mathf.Lerp(m_InfluencesBuffer[x, y], maxInfluence, Momentum);
+                }
+                else
+                {
+                    m_Influences[x, y] = 0.0f;
+                }
+
+                if (Sign(m_Influences[x, y]) != m_LastInfluence[x, y] && Mathf.Abs(m_Influences[x, y]) > 0.1f)
+                {
+                    m_LastInfluence[x, y] = Sign(m_Influences[x, y]);
                 }
             }
         }
@@ -215,5 +271,10 @@ public class InfluenceMap : GridData
         }
 
         return retVal.ToArray();
+    }
+
+    int Sign(float _number)
+    {
+        return _number < 0 ? -1 : (_number > 0 ? 1 : 0);
     }
 }

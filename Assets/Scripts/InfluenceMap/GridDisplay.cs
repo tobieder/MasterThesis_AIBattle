@@ -7,6 +7,13 @@ public interface GridData
     int Width { get; }
     int Height { get; }
     float GetValue(int _x, int _y);
+	int GetLastInfluenceValue(int _x, int _y);
+}
+
+public enum GridDisplayMode
+{
+	InfluenceMap,
+	LastInfluenceMap
 }
 
 public class GridDisplay : MonoBehaviour
@@ -16,6 +23,9 @@ public class GridDisplay : MonoBehaviour
     Mesh m_Mesh;
 
 	GridData m_GridData;
+
+	[SerializeField]
+	GridDisplayMode m_GridDisplayMode;
 
 	[SerializeField]
 	Material m_Material;
@@ -39,25 +49,43 @@ public class GridDisplay : MonoBehaviour
 		for (int yIdx = 0; yIdx < m_GridData.Height; ++yIdx)
 		{
 			for (int xIdx = 0; xIdx < m_GridData.Width; ++xIdx)
-			{
-				float value = m_GridData.GetValue(xIdx, yIdx);
-				Color c = m_NeutralColor;
-				if (value > 0.5f)
+            {
+                Color c = m_NeutralColor;
+
+                switch (m_GridDisplayMode)
 				{
-					c = Color.Lerp(m_PositiveColor, m_Positive2Color, (value - 0.5f) / 0.5f);
-				}
-				else if (value > 0)
-				{
-					c = Color.Lerp(m_NeutralColor, m_PositiveColor, value / 0.5f);
-				}
-				else if (value < -0.5f)
-				{
-					c = Color.Lerp(m_NegativeColor, m_Negative2Color, -(value + 0.5f) / 0.5f);
-				}
-				else
-				{
-					c = Color.Lerp(m_NeutralColor, m_NegativeColor, -value / 0.5f);
-				}
+					case GridDisplayMode.InfluenceMap:
+                        float value = m_GridData.GetValue(xIdx, yIdx);
+                        if (value > 0.5f)
+                        {
+                            c = Color.Lerp(m_PositiveColor, m_Positive2Color, (value - 0.5f) / 0.5f);
+                        }
+                        else if (value > 0)
+                        {
+                            c = Color.Lerp(m_NeutralColor, m_PositiveColor, value / 0.5f);
+                        }
+                        else if (value < -0.5f)
+                        {
+                            c = Color.Lerp(m_NegativeColor, m_Negative2Color, -(value + 0.5f) / 0.5f);
+                        }
+                        else
+                        {
+                            c = Color.Lerp(m_NeutralColor, m_NegativeColor, -value / 0.5f);
+                        }
+						break;
+					case GridDisplayMode.LastInfluenceMap:
+						float livValue = m_GridData.GetLastInfluenceValue(xIdx, yIdx);
+						if(livValue > 0)
+						{
+							c = m_Positive2Color;
+						}
+						else if(livValue < 0)
+						{
+							c = m_Negative2Color;
+						}
+						break;
+                }
+
 				SetColor(xIdx, yIdx, c);
 			}
 		}
@@ -69,6 +97,7 @@ public class GridDisplay : MonoBehaviour
     {
         m_Mesh = new Mesh();
         m_Mesh.name = name;
+		m_Mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
         m_MeshFilter = gameObject.AddComponent<MeshFilter>();
         m_MeshRenderer = gameObject.AddComponent<MeshRenderer>();
 
@@ -182,4 +211,10 @@ public class GridDisplay : MonoBehaviour
 		m_Colors[idx + 2] = _c;
 		m_Colors[idx + 3] = _c;
 	}
+
+	public GridData GetGridData()
+    {
+		return m_GridData;
+    }
+
 }

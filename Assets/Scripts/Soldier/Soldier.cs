@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -13,6 +14,8 @@ public class Soldier : MonoBehaviour
     public Team m_Team;
     public Vitals m_Vitals;
 
+    [SerializeField] float m_ViewDistance = 35.0f;
+    [SerializeField] float m_FieldOfView = 60.0f;
     [SerializeField] float m_MinAttackDistance = 10.0f, m_MaxAttackDistance = 25.0f;
     [SerializeField] float m_MoveSpeed = 15.0f;
 
@@ -62,7 +65,7 @@ public class Soldier : MonoBehaviour
         {
             if(m_Target != null)
             {
-                if(Vector3.Distance(transform.position, m_Target.transform.position) > m_MaxAttackDistance)
+                if(Vector3.Distance(transform.position, m_Target.transform.position) > m_ViewDistance)
                 {
                     m_Target = null;
                 }
@@ -72,9 +75,13 @@ public class Soldier : MonoBehaviour
                 Soldier bestTarget = GetNewTarget();
                 if (bestTarget != null)
                 {
-                    if (Vector3.Distance(bestTarget.transform.position, transform.position) < m_MaxAttackDistance)
+                    if (Vector3.Distance(bestTarget.transform.position, transform.position) < m_ViewDistance)
                     {
-                        m_Target = bestTarget;
+                        // Check if enemy is in fov
+                        if(Vector3.Dot(bestTarget.transform.position - transform.position, transform.forward) > 0)
+                        {
+                            m_Target = bestTarget;
+                        }
                     }
                 }
             }
@@ -337,6 +344,16 @@ public class Soldier : MonoBehaviour
         m_WalkTarget = _walkTarget;
     }
 
+    public float GetViewDistance()
+    {
+        return m_ViewDistance;
+    }
+
+    public float GetFieldOfView()
+    {
+        return m_FieldOfView;
+    }
+
     public float GetMinAttackDistance()
     {
         return m_MinAttackDistance;
@@ -412,4 +429,5 @@ public class Soldier : MonoBehaviour
     {
         m_currentCoverChangeCooldown = m_coverChangeCooldown;
     }
+
 }

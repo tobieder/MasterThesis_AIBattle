@@ -16,6 +16,9 @@ public class CameraController : MonoBehaviour
     public float m_rotationAmount;
     public Vector3 m_zoomAmount;
 
+    public Vector2 m_minCameraPosition;
+    public Vector2 m_maxCameraPosition;
+
     private Vector3 m_newPosition;
     private Quaternion m_newRotation;
     private Vector3 m_newZoom;
@@ -157,6 +160,23 @@ public class CameraController : MonoBehaviour
 
     void MoveCamera()
     {
+        if(m_newPosition.x > m_maxCameraPosition.x)
+        {
+            m_newPosition.x = m_maxCameraPosition.x;
+        }
+        if(m_newPosition.z > m_maxCameraPosition.y)
+        {
+            m_newPosition.z = m_maxCameraPosition.y;
+        }
+        if (m_newPosition.x < m_minCameraPosition.x)
+        {
+            m_newPosition.x = m_minCameraPosition.x;
+        }
+        if(m_newPosition.z < m_minCameraPosition.y)
+        {
+            m_newPosition.z = m_minCameraPosition.y;
+        }
+
         m_cameraTransform.localPosition = Vector3.Lerp(m_cameraTransform.localPosition, m_newZoom, Time.deltaTime * m_movementTime);
         transform.rotation = Quaternion.Lerp(transform.rotation, m_newRotation, Time.deltaTime * m_movementTime);
         transform.position = Vector3.Lerp(transform.position, m_newPosition, Time.deltaTime * m_movementTime);
