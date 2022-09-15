@@ -42,6 +42,7 @@ public class Soldier : MonoBehaviour
     private Soldier m_Target;
 
     private CoverSpot m_CurrentCover;
+    private GuardSpot m_CurrentGuardSpot;
 
 
     private void Start()
@@ -56,6 +57,15 @@ public class Soldier : MonoBehaviour
         m_WalkTargetSet = false;
 
         m_currentCoverChangeCooldown = m_coverChangeCooldown;
+
+        // Set Animation Clamp
+        foreach(AnimationClip clip in m_Animator.runtimeAnimatorController.animationClips)
+        {
+            if(clip.name == "assault_death_C")
+            {
+                clip.wrapMode = WrapMode.ClampForever;
+            }
+        }
     }
 
 
@@ -102,7 +112,7 @@ public class Soldier : MonoBehaviour
         else
         {
             // Die
-            m_Animator.SetBool("move", false);
+            TriggerDeathAnimation();
             ResetPathfinding();
 
             if (GetComponent<CapsuleCollider>() != null)
@@ -115,15 +125,23 @@ public class Soldier : MonoBehaviour
                 CoverManager.Instance.ExitCover(m_CurrentCover);
             }
 
+            if(m_CurrentGuardSpot != null)
+            {
+                // TODO
+                //m_CurrentGuardSpot.
+            }
+
+            /*
             Quaternion deathRotation = Quaternion.Euler(-90f, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
             if (transform.rotation != deathRotation)
             {
                 transform.rotation = deathRotation;
             }
+            */
 
             m_Vitals.Die();
 
-            Destroy(gameObject, 2);
+            //Destroy(gameObject, 2);
         }
     }
 
@@ -258,8 +276,24 @@ public class Soldier : MonoBehaviour
     public void ResetPathfinding()
     {
         m_WalkTargetSet = false;
-        m_NavMeshAgent.isStopped = true;
-        m_NavMeshAgent.ResetPath();
+        if(m_NavMeshAgent.enabled)
+        {
+            m_NavMeshAgent.isStopped = true;
+            m_NavMeshAgent.ResetPath();
+        }
+    }
+
+    public bool WalkTargetReached()
+    {
+        if(m_WalkTargetSet)
+        {
+            if (Vector3.Distance(transform.position, m_WalkTarget) < 1.0f)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public void ResetCurrentCover()
@@ -313,20 +347,21 @@ public class Soldier : MonoBehaviour
         m_Animator.SetTrigger("fire");
     }
 
-    public bool HasAnimationFinished(string _animationTag)
+    public void SetGuardAnimation(bool _state)
     {
-        if(m_Animator.GetCurrentAnimatorStateInfo(0).IsTag(_animationTag))
-        {
-            return false;
-        }
-
-        return true;
+        m_Animator.SetBool("guard", _state);
     }
 
-    // ----- GETTER/SETTER -----
-    public NavMeshAgent GetNavMeshAgent()
+    public void TriggerDeathAnimation()
     {
-        return m_NavMeshAgent;
+        m_Animator.SetTrigger("death");
+    }
+
+
+    // ----- GETTER/SETTER -----
+    public ObstacleAgent GetNavMeshAgent()
+    {
+        return GetComponent<ObstacleAgent>();
     }
 
     public bool IsWalkTargetSet()
@@ -408,6 +443,21 @@ public class Soldier : MonoBehaviour
     public void SetCurrentCoverSpot(CoverSpot _coverSpot)
     {
         m_CurrentCover = _coverSpot;
+    }
+
+    public GuardSpot GetCurrentGuardSpot()
+    {
+        return m_CurrentGuardSpot;
+    }
+
+    public void SetCurrentGuardSpot(GuardSpot _guardSpot)
+    {
+        if(m_CurrentGuardSpot != null)
+        {
+            m_CurrentGuardSpot.SetOccupier(null);
+        }
+        m_CurrentGuardSpot = _guardSpot;
+        m_CurrentGuardSpot.SetOccupier(this.transform);
     }
 
     public float GetVelocity()

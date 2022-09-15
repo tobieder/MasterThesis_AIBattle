@@ -27,6 +27,7 @@ public class InfluenceMapControlEditor : Editor
 
     private void OnSceneGUI()
     {
+        /*
         if(Application.isPlaying)
         {
             InfluenceMapControl influenceMapControl = (InfluenceMapControl)target;
@@ -39,5 +40,6 @@ public class InfluenceMapControlEditor : Editor
                 }
             }
         }
+        */
     }
 }

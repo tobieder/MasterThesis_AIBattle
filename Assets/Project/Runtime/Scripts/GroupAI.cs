@@ -1,8 +1,10 @@
+using log4net.Util;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.PlayerLoop;
 
 public struct EnemyVisionData
 {
@@ -22,7 +24,11 @@ public class GroupAI : MonoBehaviour
     public List<Soldier> m_VisibleEnemies = new List<Soldier>();
     public Dictionary<Soldier, EnemyVisionData> m_LastSeenPositionEnemies = new Dictionary<Soldier, EnemyVisionData>();
 
+    public List<CapturePOISoldierGroup> m_SoldierGroups = new List<CapturePOISoldierGroup>();
+
+
     // --- SETTINGS ---
+    public int m_TeamIndex;
     public LayerMask m_EnemyLayer;
     public float m_IgnoreEnemiesAfter = 60.0f;
     // --- SETTINGS ---
@@ -32,8 +38,9 @@ public class GroupAI : MonoBehaviour
 
     private void Awake()
     {
-        InvokeRepeating("UpdateVisibleEnemies", 0.001f, 1.0f / 10.0f);
-        InvokeRepeating("UpdateAgents", 2f, 1.0f / 10.0f);
+        InvokeRepeating("UpdateVisibleEnemies", 0.5f, 1.0f / 10.0f);
+        InvokeRepeating("UpdateAgents", 1f, 1.0f / 10.0f);
+        InvokeRepeating("UpdateGroups", 1.5f, 5.0f / 10.0f);
     }
 
     private void Update()
@@ -55,7 +62,16 @@ public class GroupAI : MonoBehaviour
                     float angleSoldierToEnemy = Vector3.Angle(enemy.transform.position - soldier.transform.position, soldier.transform.forward);
                     if (angleSoldierToEnemy < soldier.GetFieldOfView() / 2.0f)
                     {
-                        m_VisibleEnemies.Add(enemy);
+                        RaycastHit hit;
+                        // Check for obstacles
+                        if(Physics.Raycast(soldier.m_Eyes.position, enemy.m_Eyes.position - soldier.m_Eyes.position, out hit, soldier.GetViewDistance()))
+                        {
+                            if(hit.collider == enemyCollider)
+                            {
+                                Debug.DrawLine(soldier.m_Eyes.position, hit.point, Color.magenta, 1f/10f);
+                                m_VisibleEnemies.Add(enemy);
+                            }
+                        }
                     }
 
                     if(!m_LastSeenPositionEnemies.ContainsKey(enemy))
@@ -72,18 +88,24 @@ public class GroupAI : MonoBehaviour
             }
         }
 
+        Soldier soldierToRemove = null;
         foreach (KeyValuePair<Soldier, EnemyVisionData> lastSeenPositionEnemy in m_LastSeenPositionEnemies)
         {
             if(Time.time - lastSeenPositionEnemy.Value.lastSeenTime > m_IgnoreEnemiesAfter)
             {
-                m_LastSeenPositionEnemies.Remove(lastSeenPositionEnemy.Key);
+                //m_LastSeenPositionEnemies.Remove(lastSeenPositionEnemy.Key);
+                soldierToRemove = lastSeenPositionEnemy.Key;
             }
+        }
+
+        if (soldierToRemove != null)
+        {
+            m_LastSeenPositionEnemies.Remove(soldierToRemove);
         }
     }
 
     private void UpdateAgents()
     {
-        /*
         foreach (Soldier soldier in m_Team)
         {
             GroupAIManager gAIManager = soldier.GetComponent<GroupAIManager>();
@@ -113,6 +135,7 @@ public class GroupAI : MonoBehaviour
                 }
                 // --- Enemy - SELECT ---
 
+                /*
                 if(closestVisibleEnemy != null)
                 {
                     if(soldier.ReadyToFire() && closestVisibleEnemyDistance < soldier.GetMaxAttackDistance())
@@ -140,57 +163,140 @@ public class GroupAI : MonoBehaviour
                         }
                     }
                 }
+                */
             }
             else
             {
-                // check if NPC has no job currently
-                if (gAIManager.m_CurrentState == gAIManager.m_IdleState || gAIManager.m_CurrentState == gAIManager.m_CoverState)
+                // check if NPC is part of a group
+                bool hasAJob = false;
+                foreach(CapturePOISoldierGroup soldierGroup in m_SoldierGroups)
                 {
-                    if (InfluenceMapControl.Instance.AreAllValuesTheSame())
+                    if(soldierGroup.GetSoldiers().Contains(soldier))
                     {
-                        // Team has won
+                        hasAJob = true;
+                        break;
                     }
-                    else if (m_LastSeenPositionEnemies.Count > 0)
-                    {
-                        KeyValuePair<Soldier, EnemyVisionData> closestLastSeenPositionEnemy = new KeyValuePair<Soldier, EnemyVisionData>();
-                        float distanceClosestLastSeenPositionEnenmy = float.PositiveInfinity;
-                        // check for enemies that are no longer visible
-                        foreach (KeyValuePair<Soldier, EnemyVisionData> lastSeenPositionEnemy in m_LastSeenPositionEnemies)
-                        {
-                            float currentDistance = Vector3.Distance(soldier.transform.position, lastSeenPositionEnemy.Key.transform.position);
-                            if (currentDistance < distanceClosestLastSeenPositionEnenmy)
-                            {
-                                closestLastSeenPositionEnemy = lastSeenPositionEnemy;
-                                distanceClosestLastSeenPositionEnenmy = currentDistance;
-                            }
-                        }
+                }
 
-                        if (Vector3.Distance(soldier.transform.position, closestLastSeenPositionEnemy.Key.transform.position) < soldier.GetViewDistance())
+                if(!hasAJob)
+                {
+                    // check if NPC has no job currently
+                    if (gAIManager.m_CurrentState == gAIManager.m_IdleState || gAIManager.m_CurrentState == gAIManager.m_CoverState)
+                    {
+                        if (InfluenceMapControl.Instance.AreAllValuesTheSame())
                         {
-                            // Enemy is still in view -> Look at enemy to start attack
-                            soldier.transform.LookAt(closestLastSeenPositionEnemy.Key.transform.position);
+                            // Team has won
+                        }
+                        else if (m_LastSeenPositionEnemies.Count > 0)
+                        {
+                            KeyValuePair<Soldier, EnemyVisionData> closestLastSeenPositionEnemy = new KeyValuePair<Soldier, EnemyVisionData>();
+                            float distanceClosestLastSeenPositionEnenmy = float.PositiveInfinity;
+                            // check for enemies that are no longer visible
+                            foreach (KeyValuePair<Soldier, EnemyVisionData> lastSeenPositionEnemy in m_LastSeenPositionEnemies)
+                            {
+                                float currentDistance = Vector3.Distance(soldier.transform.position, lastSeenPositionEnemy.Key.transform.position);
+                                if (currentDistance < distanceClosestLastSeenPositionEnenmy)
+                                {
+                                    closestLastSeenPositionEnemy = lastSeenPositionEnemy;
+                                    distanceClosestLastSeenPositionEnenmy = currentDistance;
+                                }
+                            }
+
+                            if (Vector3.Distance(soldier.transform.position, closestLastSeenPositionEnemy.Key.transform.position) < soldier.GetViewDistance())
+                            {
+                                // Enemy is still in view -> Look at enemy to start attack
+                                soldier.transform.LookAt(closestLastSeenPositionEnemy.Key.transform.position);
+                            }
+                            else
+                            {
+                                // No enemy in range, but some enemies have been spotted earlier -> investigate
+                                SetWalkTarget(soldier, closestLastSeenPositionEnemy.Key.transform.position, Priority.low);
+                            }
                         }
                         else
                         {
-                            // No enemy in range, but some enemies have been spotted earlier -> investigate
-                            SetWalkTarget(soldier, closestLastSeenPositionEnemy.Key.transform.position);
-                        }
-                    }
-                    else
-                    {
-                        Vector2 walkTarget = InfluenceMapControl.Instance.GetClosestUnclaimedOrEnemyClaimed(new Vector2(soldier.transform.position.x, soldier.transform.position.z), soldier.GetComponent<Propagator>().Value);
-                        NavMeshHit hit;
-                        if (NavMesh.SamplePosition(new Vector3(walkTarget.x, 0.0f, walkTarget.y), out hit, 100f, NavMesh.AllAreas))
-                        {
-                            SetWalkTarget(soldier, hit.position);
+                            Vector2 walkTarget = InfluenceMapControl.Instance.GetClosestUnclaimedOrEnemyClaimed(new Vector2(soldier.transform.position.x, soldier.transform.position.z), soldier.GetComponent<Propagator>().Value);
+                            NavMeshHit hit;
+                            if (NavMesh.SamplePosition(new Vector3(walkTarget.x, 0.0f, walkTarget.y), out hit, 100f, NavMesh.AllAreas))
+                            {
+                                SetWalkTarget(soldier, hit.position, Priority.low);
+                            }
                         }
                     }
                 }
             }
         }
-        */
     }
 
+    private void UpdateGroups()
+    {
+        CapturePOISoldierGroup groupToRemove = null;
+        foreach (CapturePOISoldierGroup soldierGroup in m_SoldierGroups)
+        {
+            switch (soldierGroup.GetCapturePOIStatus())
+            {
+                case CapturePOIStatus.AssembleSoldiers:
+                    if (soldierGroup.AllSoldiersAtTarget())
+                    {
+                        // All soldiers ready to capture POI
+                        Debug.Log(soldierGroup.m_Name + " ready to capture poi");
+                        soldierGroup.BeginCapture();
+                    }
+                    break;
+                case CapturePOIStatus.Capture:
+                    // TODO: check if clear of enemies!
+                    //if (soldierGroup.m_TargetPOI.GetTeamOccupation() == m_TeamIndex)
+                    if (soldierGroup.Capture())
+                    {
+                        soldierGroup.BeginGuard(this);
+                    }
+                    break;
+                case CapturePOIStatus.Guard:
+                    // Sent all units to their guard positions -> destroy group
+                    groupToRemove = soldierGroup;
+                    break;
+            }
+        }
+        m_SoldierGroups.Remove(groupToRemove);
+    }
+
+    // Functionality
+    public Soldier GetFreeSoldier()
+    {
+        foreach(Soldier soldier in m_Team)
+        {
+            GroupAIManager gAIManager = soldier.GetComponent<GroupAIManager>();
+            if(gAIManager.IsFree())
+            {
+                return soldier;
+            }
+        }
+
+        return null;
+    }
+
+    public Soldier GetClosestFreeSoldier(Vector3 _position)
+    {
+        float closestDistance = float.MaxValue;
+        Soldier closestSoldier = null;
+        foreach (Soldier soldier in m_Team)
+        {
+            GroupAIManager gAIManager = soldier.GetComponent<GroupAIManager>();
+            if (gAIManager.IsFree())
+            {
+                float currDistance = Vector3.Distance(_position, soldier.transform.position);
+                if (currDistance < closestDistance)
+                {
+                    closestDistance = currDistance;
+                    closestSoldier = soldier;
+                }
+            }
+        }
+
+        return closestSoldier;
+    }
+
+    // Soldier Registration
     public void RegisterSoldier(Soldier _soldier)
     {
         m_Team.Add(_soldier);
@@ -201,9 +307,10 @@ public class GroupAI : MonoBehaviour
         m_Team.Remove(_soldier);
     }
 
-    public void SetWalkTarget(Soldier _soldier, Vector3 _target)
+    // State Managment
+    public void SetWalkTarget(Soldier _soldier, Vector3 _target, Priority _priority)
     {
-        _soldier.GetComponent<GroupAIManager>().SetWalkToTargetState(_target);
+        _soldier.GetComponent<GroupAIManager>().SetWalkToTargetState(_target, _priority);
     }
 
     public void SetAttackState(Soldier _soldier, Soldier _target)
@@ -216,6 +323,11 @@ public class GroupAI : MonoBehaviour
         _soldier.GetComponent<GroupAIManager>().SetMoveToCoverState(_coverSpot);
     }
 
+    public void SetMoveToGuardSpotState(Soldier _soldier, GuardSpot _guardSpot)
+    {
+        _soldier.GetComponent<GroupAIManager>().SetMoveToGuardSpotState(_guardSpot);
+    }
+
     public void SetCoverAttackState(Soldier _soldier, Soldier _target)
     {
         _soldier.GetComponent<GroupAIManager>().SetCoverAttackState(_target);
@@ -226,24 +338,28 @@ public class GroupAI : MonoBehaviour
         _soldier.GetComponent<GroupAIManager>().SetFormationState(_formation);
     }
 
+    // Debug
     private void OnDrawGizmosSelected()
     {
         if(m_VisibleEnemies != null)
         {
-            Gizmos.color = Color.yellow;
+            Gizmos.color = Color.green;
             foreach (Soldier enemy in m_VisibleEnemies)
             {
-                Gizmos.DrawWireSphere(enemy.transform.position, 1.0f);
+                Gizmos.DrawSphere(enemy.transform.position, 1.0f);
             }
         }
 
         if(m_LastSeenPositionEnemies != null)
         {
-            Gizmos.color = Color.green;
+            Gizmos.color = Color.yellow;
             foreach (KeyValuePair<Soldier, EnemyVisionData> keyValuePair in m_LastSeenPositionEnemies)
             {
-                Gizmos.DrawWireSphere(keyValuePair.Value.position, 1.0f);
-                Handles.Label(keyValuePair.Value.position, (Time.time - keyValuePair.Value.lastSeenTime).ToString());
+                if(!m_VisibleEnemies.Contains(keyValuePair.Key))
+                {
+                    Gizmos.DrawSphere(keyValuePair.Value.position, 1.0f);
+                    Handles.Label(keyValuePair.Value.position, (Time.time - keyValuePair.Value.lastSeenTime).ToString("F2"));
+                }
             }
         }
 
@@ -252,7 +368,7 @@ public class GroupAI : MonoBehaviour
             Gizmos.color = Color.blue;
             foreach (Soldier soldier in m_Team)
             {
-                Gizmos.DrawWireSphere(soldier.transform.position, 1.0f);
+                Gizmos.DrawSphere(soldier.transform.position, 1.0f);
             }
         }
     }

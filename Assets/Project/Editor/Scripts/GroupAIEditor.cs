@@ -29,7 +29,7 @@ public class GroupAIEditor : Editor
 
         GroupAI groupAI = (GroupAI)target;
 
-        if(GUILayout.Button("Spawn Arrow Formation 3 at Random Unit"))
+        if (GUILayout.Button("Spawn Arrow Formation 3 at Random Unit"))
         {
             int randIndex = Random.Range(0, groupAI.m_Team.Count - 1);
 
@@ -49,22 +49,57 @@ public class GroupAIEditor : Editor
             EditorCoroutineUtility.StartCoroutine(AttachSoldiersToFormation(randIndex), this);
         }
 
-        foreach(POI poi in POIManager.Instance.GetPOIs())
+        if(POIManager.Instance != null)
         {
-            GUILayout.Label(poi.name, EditorStyles.boldLabel);
-
-            if (!POIManager.Instance.GetPOIsTeam1().Contains(poi))
+            foreach (POI poi in POIManager.Instance.GetPOIs())
             {
-                if (GUILayout.Button("Capture " + poi.name + " POI"))
-                {
+                GUILayout.Label(poi.name, EditorStyles.boldLabel);
 
+                List<POI> teamPOIs;
+                if(groupAI.m_TeamIndex == 1)
+                {
+                    teamPOIs = POIManager.Instance.GetPOIsTeam1();
                 }
-            }
-            else
-            {
-                if (GUILayout.Button("Set Guard Spots"))
+                else
                 {
+                    teamPOIs = POIManager.Instance.GetPOIsTeam2();
+                }
 
+                if (!teamPOIs.Contains(poi))
+                {
+                    if (GUILayout.Button("Capture " + poi.name + " POI"))
+                    {
+                        CapturePOISoldierGroup soldierGroup = new CapturePOISoldierGroup(poi.name + " capture group", groupAI.m_TeamIndex, poi);
+                        foreach(Soldier soldier in groupAI.m_Team)
+                        {
+                            if(soldier.GetComponent<GroupAIManager>().IsFree())
+                            {
+                                soldierGroup.RegisterSoldier(soldier);
+                            }
+                        }
+
+                        soldierGroup.BeginAssembleSoldiers();
+                        groupAI.m_SoldierGroups.Add(soldierGroup);
+                    }
+                }
+                else
+                {
+                    if (GUILayout.Button("Set Guard Spots"))
+                    {
+                        Debug.Log("Set Guard Spots");
+                        foreach (GuardSpot guardSpot in poi.GetGuardSpots())
+                        {
+                            Soldier soldier = groupAI.GetFreeSoldier();
+                            if(soldier != null)
+                            {
+                                groupAI.SetMoveToGuardSpotState(soldier, guardSpot);
+                            }
+                            else
+                            {
+                                return;
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -94,7 +129,7 @@ public class GroupAIEditor : Editor
 
                     if (NavMesh.SamplePosition(walkTarget, out hit, 0.5f, NavMesh.AllAreas))
                     {
-                        groupAI.SetWalkTarget(soldier, walkTarget);
+                        groupAI.SetWalkTarget(soldier, walkTarget, Priority.low);
                         return;
                     }
                 }
@@ -105,7 +140,7 @@ public class GroupAIEditor : Editor
                 Vector2 walkTarget = InfluenceMapControl.Instance.GetClosestUnclaimedOrEnemyClaimed(new Vector2(soldier.transform.position.x, soldier.transform.position.z), soldier.GetComponent<Propagator>().Value);
                 Debug.Log(soldier.GetComponent<Propagator>().Value);
                 Debug.Log(soldier.transform.position + " -> " + walkTarget);
-                groupAI.SetWalkTarget(soldier, new Vector3(walkTarget.x, 0.0f, walkTarget.y));
+                groupAI.SetWalkTarget(soldier, new Vector3(walkTarget.x, 0.0f, walkTarget.y), Priority.low);
             }
 
             if (GUILayout.Button("Register To Formation."))

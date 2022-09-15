@@ -6,6 +6,7 @@ public class WalkToTarget_GroupAI : GroupAIState
 {
     public Idle_GroupAI m_IdleState;
 
+    [SerializeField]
     private Vector3 m_WalkTarget;
 
     public override GroupAIState RunCurrentState()
@@ -15,11 +16,8 @@ public class WalkToTarget_GroupAI : GroupAIState
         if(m_WalkTarget != m_SoldierData.GetWalkTarget())
         {
             m_WalkTarget = m_SoldierData.GetWalkTarget();
-            
-            if(!m_SoldierData.GetNavMeshAgent().SetDestination(m_WalkTarget))
-            {
-                Debug.LogWarning("No path found.");
-            }
+
+            m_SoldierData.GetNavMeshAgent().SetDestination(m_WalkTarget);
         }
 
         Vector3 distanceToDestination = transform.position - m_WalkTarget;

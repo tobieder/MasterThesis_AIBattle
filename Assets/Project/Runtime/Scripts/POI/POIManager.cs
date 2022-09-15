@@ -110,4 +110,9 @@ public class POIManager : MonoBehaviour
     {
         return m_POIsTeam1;
     }
+
+    public List<POI> GetPOIsTeam2()
+    {
+        return m_POIsTeam2;
+    }
 }

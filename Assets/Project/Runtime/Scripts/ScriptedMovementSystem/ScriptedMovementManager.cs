@@ -1,39 +1,65 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class ScriptedMovementManager : MonoBehaviour
 {
     public int m_SoldiersNeeded;
 
     public List<TacticalPointList> m_TacticalPointList;
-    public List<Soldier_Scripted> m_SubscribedSoldiers;
+    //public List<Soldier_Scripted> m_SubscribedSoldiers;
+    public List<Soldier> m_SubscribedSoldiers;
 
-    private int m_currentTacticalPoints = 0;
+    private int m_currentTacticalPoint = 0;
 
-    private void Update()
+    public void ResetScriptedMovement()
     {
-        if(m_SubscribedSoldiers.Count == m_SoldiersNeeded)
-        {
-            bool allSoldiersAtCurrentTacticalPoint = true;
-            for(int i = 0; i < m_SubscribedSoldiers.Count; i++)
-            {
-                m_SubscribedSoldiers[i].SetTarget(m_TacticalPointList[m_currentTacticalPoints].m_Points[i]);
+        m_SubscribedSoldiers.Clear();
+    }
 
-                if (Vector3.Distance(m_SubscribedSoldiers[i].transform.position, m_TacticalPointList[m_currentTacticalPoints].m_Points[i].transform.position) > 0.5f)
+    public bool Run()
+    {
+        if (m_currentTacticalPoint < m_TacticalPointList.Count)
+        {
+            if (m_SubscribedSoldiers.Count == m_SoldiersNeeded)
+            {
+                bool allSoldiersAtCurrentTacticalPoint = true;
+                for (int i = 0; i < m_SubscribedSoldiers.Count; i++)
                 {
-                    allSoldiersAtCurrentTacticalPoint=false;
+                    //m_SubscribedSoldiers[i].SetTarget(m_TacticalPointList[m_currentTacticalPoints].m_Points[i]);
+                    m_SubscribedSoldiers[i].GetComponent<GroupAIManager>().SetWalkToTargetState(m_TacticalPointList[m_currentTacticalPoint].m_Points[i].transform.position, Priority.job);
+
+                    if (Vector3.Distance(m_SubscribedSoldiers[i].transform.position, m_TacticalPointList[m_currentTacticalPoint].m_Points[i].transform.position) > 0.5f)
+                    {
+                        allSoldiersAtCurrentTacticalPoint = false;
+                    }
+                }
+                if (allSoldiersAtCurrentTacticalPoint)
+                {
+                    m_currentTacticalPoint++;
                 }
             }
-            if(allSoldiersAtCurrentTacticalPoint)
-            {
-                m_currentTacticalPoints++;
-                m_currentTacticalPoints = Mathf.Clamp(m_currentTacticalPoints, 0, 1);
-            }
+
+            return false;
+        }
+        else
+        {
+            // End reached
+            Debug.Log("End reached");
+            return true;
         }
     }
 
-    public void SubscribeToScriptedMovement(Soldier_Scripted _soldier)
+    public void Subscribe(Soldier_Scripted _soldier)
+    {
+        if(m_SubscribedSoldiers.Count < m_SoldiersNeeded)
+        {
+            //m_SubscribedSoldiers.Add(_soldier);
+        }
+    }
+
+    public void Subscribe(Soldier _soldier)
     {
         if(m_SubscribedSoldiers.Count < m_SoldiersNeeded)
         {

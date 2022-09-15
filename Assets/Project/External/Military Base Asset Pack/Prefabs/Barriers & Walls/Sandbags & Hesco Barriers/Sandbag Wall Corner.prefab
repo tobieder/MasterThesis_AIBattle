@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4619862243813148}
   - component: {fileID: 33637049264476458}
   - component: {fileID: 23524793378973870}
+  - component: {fileID: 8228987497627976498}
   m_Layer: 0
   m_Name: Sandbag_Wall_Corner_LOD3
   m_TagString: Untagged
@@ -83,6 +84,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &8228987497627976498
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1373957607364566}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300134, guid: 6b16e89ff3752f14caaa9c3fd54d65ce, type: 3}
 --- !u!1 &1554110155518122
 GameObject:
   m_ObjectHideFlags: 0
@@ -94,6 +109,7 @@ GameObject:
   - component: {fileID: 4437524700334470}
   - component: {fileID: 33382411378936992}
   - component: {fileID: 23794032247509854}
+  - component: {fileID: 3502679692462169613}
   m_Layer: 0
   m_Name: Sandbag_Wall_Corner_LOD1
   m_TagString: Untagged
@@ -166,6 +182,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &3502679692462169613
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1554110155518122}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300132, guid: 6b16e89ff3752f14caaa9c3fd54d65ce, type: 3}
 --- !u!1 &1679884030912116
 GameObject:
   m_ObjectHideFlags: 0
@@ -177,6 +207,7 @@ GameObject:
   - component: {fileID: 4172844708295590}
   - component: {fileID: 33036940794464624}
   - component: {fileID: 23690374837660872}
+  - component: {fileID: 2244178404054088}
   m_Layer: 0
   m_Name: Sandbag_Wall_Corner_LOD0
   m_TagString: Untagged
@@ -249,6 +280,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &2244178404054088
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1679884030912116}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300130, guid: 6b16e89ff3752f14caaa9c3fd54d65ce, type: 3}
 --- !u!1 &1743238128142560
 GameObject:
   m_ObjectHideFlags: 0
@@ -260,6 +305,7 @@ GameObject:
   - component: {fileID: 4472968392764760}
   - component: {fileID: 33832990320229782}
   - component: {fileID: 23149427684704096}
+  - component: {fileID: 4522965266741806389}
   m_Layer: 0
   m_Name: Sandbag_Wall_Corner_LOD2
   m_TagString: Untagged
@@ -332,6 +378,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &4522965266741806389
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1743238128142560}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300142, guid: 6b16e89ff3752f14caaa9c3fd54d65ce, type: 3}
 --- !u!1 &1928671822326736
 GameObject:
   m_ObjectHideFlags: 0

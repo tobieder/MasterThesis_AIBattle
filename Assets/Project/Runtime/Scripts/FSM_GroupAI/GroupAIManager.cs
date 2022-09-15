@@ -2,6 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum Priority
+{
+    none,
+    low,
+    job,
+    action
+}
+
 public class GroupAIManager : MonoBehaviour
 {
     public GroupAIState m_CurrentState;
@@ -10,9 +18,14 @@ public class GroupAIManager : MonoBehaviour
     public WalkToTarget_GroupAI m_WalkToTarget;
     public Formation_GroupAI m_FormationState;
     public Attack_GroupAI m_AttackState;
+    public MoveToGuardSpot_GroupAI m_MoveToGuardSpotState;
+    public Guard_GroupAI m_GuardGroupAI;
     public MoveToCover_GroupAI m_MoveToCoverState;
     public Cover_GroupAI m_CoverState;
     public CoverAttack_GroupAI m_CoverAttackState;
+
+    [SerializeField]
+    private Priority m_Priority = Priority.none;
 
     public void Run()
     {
@@ -24,6 +37,28 @@ public class GroupAIManager : MonoBehaviour
         }
     }
 
+    // Functionality
+    public bool IsFree()
+    {
+        if(m_Priority < Priority.job)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public bool IsInAction()
+    {
+        if(m_Priority == Priority.action)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    // State Managment
     private void SetState(GroupAIState _newState)
     {
         if(m_CurrentState == m_CoverState && m_CurrentState != m_CoverAttackState)
@@ -39,17 +74,20 @@ public class GroupAIManager : MonoBehaviour
 
     public void SetIdleState()
     {
+        m_Priority = Priority.none;
         SetState(m_IdleState);
     }
 
-    public void SetWalkToTargetState(Vector3 _walkTarget)
+    public void SetWalkToTargetState(Vector3 _walkTarget, Priority _priority)
     {
+        m_Priority = _priority;
         m_WalkToTarget.m_SoldierData.SetWalkTarget(_walkTarget);
         SetState(m_WalkToTarget);
     }
 
     public void SetFormationState(Formation _formation)
     {
+        m_Priority = Priority.job;
         Transform formationPosition = _formation.RegisterSoldierToFormation(m_FormationState.m_SoldierData);
         m_FormationState.SetFormation(_formation);
         m_FormationState.SetFormationPosition(formationPosition);
@@ -58,18 +96,28 @@ public class GroupAIManager : MonoBehaviour
 
     public void SetAttackState(Soldier _target)
     {
+        m_Priority = Priority.action;
         m_AttackState.m_SoldierData.SetTarget(_target);
         SetState(m_AttackState);
     }
 
     public void SetMoveToCoverState(CoverSpot _coverSpot)
     {
+        m_Priority = Priority.job;
         m_MoveToCoverState.m_SoldierData.SetCurrentCoverSpot(_coverSpot);
         SetState(m_MoveToCoverState);
     }
 
+    public void SetMoveToGuardSpotState(GuardSpot _guardSpot)
+    {
+        m_Priority = Priority.job;
+        m_MoveToCoverState.m_SoldierData.SetCurrentGuardSpot(_guardSpot);
+        SetState(m_MoveToGuardSpotState);
+    }
+
     public void SetCoverAttackState(Soldier _target)
     {
+        m_Priority = Priority.action;
         m_CoverAttackState.m_SoldierData.SetTarget(_target);
         SetState(m_CoverAttackState);
     }

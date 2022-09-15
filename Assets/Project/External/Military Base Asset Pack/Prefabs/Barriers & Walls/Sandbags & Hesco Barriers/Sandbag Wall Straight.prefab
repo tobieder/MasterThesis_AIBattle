@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4843043420918828}
   - component: {fileID: 33139875544622906}
   - component: {fileID: 23728004125838228}
+  - component: {fileID: 1481212869995925298}
   m_Layer: 0
   m_Name: Sandbag_Wall_Straight_LOD3
   m_TagString: Untagged
@@ -83,6 +84,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &1481212869995925298
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1240827623015320}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300122, guid: 6b16e89ff3752f14caaa9c3fd54d65ce, type: 3}
 --- !u!1 &1332187145067626
 GameObject:
   m_ObjectHideFlags: 0
@@ -161,6 +176,7 @@ GameObject:
   - component: {fileID: 4007664061159716}
   - component: {fileID: 33832350252781468}
   - component: {fileID: 23536100975389236}
+  - component: {fileID: 1799941911881231027}
   m_Layer: 0
   m_Name: Sandbag_Wall_Straight_LOD1
   m_TagString: Untagged
@@ -233,6 +249,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &1799941911881231027
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1590223731087872}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300126, guid: 6b16e89ff3752f14caaa9c3fd54d65ce, type: 3}
 --- !u!1 &1592426678153446
 GameObject:
   m_ObjectHideFlags: 0
@@ -244,6 +274,7 @@ GameObject:
   - component: {fileID: 4263366490805452}
   - component: {fileID: 33275278004401416}
   - component: {fileID: 23374893107300244}
+  - component: {fileID: 1004470691570440290}
   m_Layer: 0
   m_Name: Sandbag_Wall_Straight_LOD0
   m_TagString: Untagged
@@ -316,6 +347,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &1004470691570440290
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1592426678153446}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300128, guid: 6b16e89ff3752f14caaa9c3fd54d65ce, type: 3}
 --- !u!1 &1852694007979276
 GameObject:
   m_ObjectHideFlags: 0
@@ -327,6 +372,7 @@ GameObject:
   - component: {fileID: 4021330055214142}
   - component: {fileID: 33399042839839546}
   - component: {fileID: 23114679828988014}
+  - component: {fileID: 2634309137628283289}
   m_Layer: 0
   m_Name: Sandbag_Wall_Straight_LOD2
   m_TagString: Untagged
@@ -399,3 +445,17 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &2634309137628283289
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1852694007979276}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300124, guid: 6b16e89ff3752f14caaa9c3fd54d65ce, type: 3}
