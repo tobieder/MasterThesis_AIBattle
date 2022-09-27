@@ -9,6 +9,8 @@ public class POI : MonoBehaviour
 {
     [SerializeField] int m_TeamOccupation = 0;
 
+    [SerializeField] int m_MinNumberOfRequiredSoldiersToCapture = 5;
+
     [SerializeField] Transform m_GuardSpotsHolder;
     [SerializeField] List<GuardSpot> m_GuardSpots;
     [SerializeField] Transform m_AssemblySpotsHolder;
@@ -132,8 +134,6 @@ public class POI : MonoBehaviour
 
                 if (NavMesh.SamplePosition(walkTarget, out hit, 0.5f, areaMask))
                 {
-                    GameObject go = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                    go.transform.position = walkTarget;
                     return walkTarget;
                 }
             }
@@ -142,6 +142,11 @@ public class POI : MonoBehaviour
         }
 
         return Vector3.zero;
+    }
+
+    public int GetMinNumerOfRequiredSoldiersToCapture()
+    {
+        return m_MinNumberOfRequiredSoldiersToCapture;
     }
 
     public int GetNumberOfRequiredGuards()

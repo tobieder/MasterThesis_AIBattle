@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+[RequireComponent(typeof(NavMeshAgent))]
 public class Formation : MonoBehaviour
 {
     [SerializeField]
@@ -17,8 +18,12 @@ public class Formation : MonoBehaviour
     [SerializeField]
     Dictionary<Transform, Soldier> m_FormationOccupancy = new Dictionary<Transform, Soldier>();
 
-    private void Start()
+    private NavMeshAgent m_NavMeshAgent;
+
+    private void Awake()
     {
+        m_NavMeshAgent = GetComponent<NavMeshAgent>();
+
         foreach(Transform formationPosition in m_FormationPositions)
         {
             m_FormationOccupancy.Add(formationPosition, null);
@@ -27,15 +32,44 @@ public class Formation : MonoBehaviour
 
     private void Update()
     {
+        // Target not yet set
         if (m_Target == null)
             return;
 
         if(Vector3.Distance(transform.position, m_Target) <= 1.0f)
         {
-            m_CurrentPath = null;
+            // Arrived at target -> destroy formation (Soldiers will automatically move to idle state)
+            Destroy(gameObject);
         }
         else
         {
+            if(AreAllUnitsInPosition(2.0f))
+            {
+                m_NavMeshAgent.isStopped = false;
+                m_NavMeshAgent.SetDestination(m_Target);
+
+                float maxDistance = 0.0f;
+                foreach(Transform position in m_FormationPositions)
+                {
+                    float currDistance = DistanceSoldierToAssignedPosition(position);
+
+                    if(currDistance > maxDistance)
+                    {
+                        maxDistance = currDistance;
+                    }
+                }
+
+                if(maxDistance > 0.75f)
+                {
+                    m_NavMeshAgent.speed = m_MoveSpeed * ((2.0f - maxDistance) / (2.0f - 0.75f));
+                }
+            }
+            else
+            {
+                m_NavMeshAgent.isStopped = true;
+            }
+
+            /*
             if(AreAllUnitsInPosition(2.0f))
             {
                 if(m_CurrentPath == null)
@@ -79,6 +113,7 @@ public class Formation : MonoBehaviour
                     }
                 }
             }
+            */
         }
     }
 
@@ -145,6 +180,11 @@ public class Formation : MonoBehaviour
         }
 
         return allUnitsInPosition;
+    }
+
+    public float DistanceSoldierToAssignedPosition(Transform _position)
+    {
+        return Vector3.Distance(_position.position, m_FormationOccupancy[_position].transform.position);
     }
 
     Path CalculatePath(Vector3 _source, Vector3 _destination)

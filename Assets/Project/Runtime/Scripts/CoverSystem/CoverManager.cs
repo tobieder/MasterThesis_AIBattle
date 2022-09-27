@@ -64,17 +64,25 @@ public class CoverManager : MonoBehaviour
         {
             CoverSpot currentCoverSpot = possibleCoverSpots[i];
 
-            if (!currentCoverSpot.IsOccupied() && currentCoverSpot.IsCoveredFromEnemy(_enemyPosition) && Vector3.Distance(currentCoverSpot.transform.position, _enemyPosition) >= _minAttackDistance && !IsCoverPastEnemyLine(_soldier, currentCoverSpot))
+            float distanceCoverToEnemy = Vector3.Distance(currentCoverSpot.transform.position, _enemyPosition);
+            float distanceCoverToSoldier = Vector3.Distance(currentCoverSpot.transform.position, soldierPoisition);
+            float distanceSoldierToEnemy = Vector3.Distance(_enemyPosition, soldierPoisition);
+
+            if (!currentCoverSpot.IsOccupied() && 
+                currentCoverSpot.IsCoveredFromEnemy(_enemyPosition) &&
+                distanceCoverToEnemy >= _minAttackDistance &&
+                distanceCoverToEnemy < _maxAttackDistance &&
+                !IsCoverPastEnemyLine(_soldier, currentCoverSpot))
             {
                 if (bestCover == null)
                 {
                     bestCover = currentCoverSpot;
                 }
                 else if (currentCoverSpot != _prevCoverSpot &&
-                    Vector3.Distance(bestCover.transform.position, soldierPoisition) > Vector3.Distance(currentCoverSpot.transform.position, soldierPoisition) &&
-                    Vector3.Distance(currentCoverSpot.transform.position, _enemyPosition) < Vector3.Distance(soldierPoisition, _enemyPosition))
+                    Vector3.Distance(bestCover.transform.position, soldierPoisition) > distanceCoverToSoldier &&
+                    distanceCoverToEnemy < distanceSoldierToEnemy)
                 {
-                    if (Vector3.Distance(currentCoverSpot.transform.position, soldierPoisition) < Vector3.Distance(_enemyPosition, soldierPoisition))
+                    if (distanceCoverToSoldier < distanceSoldierToEnemy)
                     {
                         bestCover = currentCoverSpot;
                     }

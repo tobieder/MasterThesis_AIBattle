@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4761911196971228}
   - component: {fileID: 205892612857968220}
+  - component: {fileID: 9143598523210589505}
   m_Layer: 0
   m_Name: Tent_Alaska_L6_Army_Green
   m_TagString: Untagged
@@ -63,6 +64,22 @@ LODGroup:
     renderers:
     - renderer: {fileID: 23382579351667022}
   m_Enabled: 1
+--- !u!114 &9143598523210589505
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1001164622063488}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_OverrideArea: 1
+  m_Area: 1
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: ffffffff
 --- !u!1 &1029850684542670
 GameObject:
   m_ObjectHideFlags: 0

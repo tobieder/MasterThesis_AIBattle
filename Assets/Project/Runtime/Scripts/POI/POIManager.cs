@@ -26,7 +26,7 @@ public class POIManager : MonoBehaviour
 
         m_POIs = new List<POI>(GameObject.FindObjectsOfType<POI>());
 
-        InvokeRepeating("UpdatePOILists", 2.0f, 0.5f);
+        InvokeRepeating("UpdatePOILists", 1.0f, 0.5f);
     }
 
     private void UpdatePOILists()
@@ -87,6 +87,28 @@ public class POIManager : MonoBehaviour
         foreach (POI poi in m_POIs)
         {
             if (poi.GetTeamOccupation() != _soldier.GetComponent<Team>().GetTeamNumber())
+            {
+                float currentDistance = Vector3.Distance(_soldier.transform.position, poi.GetComponent<BoxCollider>().ClosestPointOnBounds(_soldier.transform.position));
+
+                if (currentDistance < distanceClosesPOI)
+                {
+                    closestPOI = poi;
+                    distanceClosesPOI = currentDistance;
+                }
+            }
+        }
+
+        return closestPOI;
+    }
+
+    public POI GetClosestTeamPOI(Soldier _soldier)
+    {
+        POI closestPOI = null;
+        float distanceClosesPOI = float.PositiveInfinity;
+
+        foreach (POI poi in m_POIs)
+        {
+            if (poi.GetTeamOccupation() == _soldier.GetComponent<Team>().GetTeamNumber())
             {
                 float currentDistance = Vector3.Distance(_soldier.transform.position, poi.GetComponent<BoxCollider>().ClosestPointOnBounds(_soldier.transform.position));
 

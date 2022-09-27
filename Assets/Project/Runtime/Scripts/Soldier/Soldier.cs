@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor.PackageManager;
+using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -30,6 +31,8 @@ public class Soldier : MonoBehaviour
     public Transform m_Eyes;
 
     // Internal
+    private bool m_Dead = false;
+
     private Vector3 m_PreviousPosition;
     private float m_Velocity;
 
@@ -57,20 +60,16 @@ public class Soldier : MonoBehaviour
         m_WalkTargetSet = false;
 
         m_currentCoverChangeCooldown = m_coverChangeCooldown;
-
-        // Set Animation Clamp
-        foreach(AnimationClip clip in m_Animator.runtimeAnimatorController.animationClips)
-        {
-            if(clip.name == "assault_death_C")
-            {
-                clip.wrapMode = WrapMode.ClampForever;
-            }
-        }
     }
 
 
     private void Update()
     {
+        if(m_Dead)
+        {
+            return;
+        }
+
         if(m_Vitals.GetHealth() > 0)
         {
             if(m_Target != null)
@@ -90,7 +89,15 @@ public class Soldier : MonoBehaviour
                         // Check if enemy is in fov
                         if(Vector3.Dot(bestTarget.transform.position - transform.position, transform.forward) > 0)
                         {
-                            m_Target = bestTarget;
+                            RaycastHit hit;
+                            // Check for obstacles
+                            if (Physics.Raycast(m_Eyes.position, bestTarget.m_Eyes.position - m_Eyes.position, out hit, GetViewDistance()))
+                            {
+                                if (hit.collider == bestTarget.GetComponent<Collider>())
+                                {
+                                    m_Target = bestTarget;
+                                }
+                            }
                         }
                     }
                 }
@@ -101,24 +108,19 @@ public class Soldier : MonoBehaviour
             m_Velocity = lastFrameMovement.magnitude / Time.deltaTime;
             m_PreviousPosition = transform.position;
 
-            // Run selected Controller
-            // ----- Update State Machine -----
-            m_SoldierController.RunSoldierController();
-
             // ----- Update Cooldowns -----
             m_currentFireCooldown -= Time.deltaTime;
             m_currentCoverChangeCooldown -= Time.deltaTime;
+
+            // Run selected Controller
+            // ----- Update State Machine -----
+            m_SoldierController.RunSoldierController();
         }
         else
         {
             // Die
             TriggerDeathAnimation();
             ResetPathfinding();
-
-            if (GetComponent<CapsuleCollider>() != null)
-            {
-                Destroy(GetComponent<CapsuleCollider>());
-            }
 
             if (m_CurrentCover != null)
             {
@@ -131,17 +133,30 @@ public class Soldier : MonoBehaviour
                 //m_CurrentGuardSpot.
             }
 
-            /*
-            Quaternion deathRotation = Quaternion.Euler(-90f, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
-            if (transform.rotation != deathRotation)
-            {
-                transform.rotation = deathRotation;
-            }
-            */
-
             m_Vitals.Die();
 
+            Destroy(GetComponent<Rigidbody>());
+            Destroy(GetComponent<CapsuleCollider>());
+            Destroy(GetComponent<ObstacleAgent>());
+            Destroy(GetComponent<NavMeshAgent>());
+            Destroy(GetComponent<NavMeshObstacle>());
+            Destroy(GetComponent<SoldierController>());
+            Destroy(GetComponent<Soldier>());
+            Destroy(GetComponent<Vitals>());
+            Destroy(GetComponent<Team>());
+            Destroy(GetComponent<Propagator>());
+            Destroy(GetComponent<StateManager>());
+            Destroy(GetComponent<GroupAIManager>());
+
+            Destroy(transform.Find("Eyes").gameObject);
+            Destroy(transform.Find("FSM").gameObject);
+            Destroy(transform.Find("FSM_GroupAI").gameObject);
+
+            Destroy(m_Vitals.GetHealthBar().gameObject);
+
             //Destroy(gameObject, 2);
+
+            m_Dead = true;
         }
     }
 
@@ -257,12 +272,12 @@ public class Soldier : MonoBehaviour
         return IsTargetVisible(m_Target);
     }
 
-    bool IsTargetVisible(Soldier _target)
+    public bool IsTargetVisible(Soldier _target)
     {
         Vector3 directionToEnemy = _target.m_Eyes.position - m_Eyes.position;
         RaycastHit hit;
 
-        if (Physics.Raycast(m_Eyes.position, directionToEnemy, out hit, Mathf.Infinity))
+        if (Physics.Raycast(m_Eyes.position, directionToEnemy, out hit, m_ViewDistance))
         {
             if (hit.transform == _target.transform)
             {

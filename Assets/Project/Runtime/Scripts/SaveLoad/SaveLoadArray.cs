@@ -134,7 +134,8 @@ public class SaveLoadArray
         catch (System.Exception e)
         {
             // handle errors here.
-            Debug.LogError("Errer on loading Influence Map.");
+            Debug.LogError("Eropr on loading Influence Map.");
+            Debug.Log(e);
         }
 
         return influenceMap;

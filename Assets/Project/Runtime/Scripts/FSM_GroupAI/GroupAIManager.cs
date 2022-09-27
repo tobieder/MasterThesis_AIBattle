@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection.Emit;
+using UnityEditor;
 using UnityEngine;
 
 public enum Priority
@@ -7,6 +9,7 @@ public enum Priority
     none,
     low,
     job,
+    formation,
     action
 }
 
@@ -25,10 +28,22 @@ public class GroupAIManager : MonoBehaviour
     public CoverAttack_GroupAI m_CoverAttackState;
 
     [SerializeField]
+    private float m_TimeSinceNonePriority;
+
+    [SerializeField]
     private Priority m_Priority = Priority.none;
 
     public void Run()
     {
+        if(m_CurrentState == m_IdleState)
+        {
+            m_TimeSinceNonePriority += Time.deltaTime;
+        }
+        else
+        {
+            m_TimeSinceNonePriority = 0.0f;
+        }
+
         GroupAIState nextState = m_CurrentState?.RunCurrentState();
 
         if(nextState != null && nextState != m_CurrentState)
@@ -38,6 +53,21 @@ public class GroupAIManager : MonoBehaviour
     }
 
     // Functionality
+    public bool DoesNothing()
+    {
+        if(m_Priority == Priority.none)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public float GetTimeSinceNonePriority()
+    {
+        return m_TimeSinceNonePriority;
+    }
+
     public bool IsFree()
     {
         if(m_Priority < Priority.job)
@@ -58,15 +88,33 @@ public class GroupAIManager : MonoBehaviour
         return false;
     }
 
+    public bool IsInCover()
+    {
+        if(m_CurrentState == m_MoveToCoverState ||
+            m_CurrentState == m_CoverState ||
+            m_CurrentState == m_CoverAttackState)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     // State Managment
     private void SetState(GroupAIState _newState)
     {
         if(m_CurrentState == m_CoverState && m_CurrentState != m_CoverAttackState)
         {
             // Exit Cover
-            Debug.Log("Exit Cover");
+            //Debug.Log("Exit Cover");
             m_CoverState.m_SoldierData.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
             m_CoverState.m_SoldierData.SetCrouchAnimation(false);
+            m_CoverState.m_SoldierData.ResetCurrentCover();
+        }
+
+        if(_newState == m_IdleState)
+        {
+            m_Priority = Priority.none;
         }
 
         m_CurrentState = _newState;
@@ -87,7 +135,7 @@ public class GroupAIManager : MonoBehaviour
 
     public void SetFormationState(Formation _formation)
     {
-        m_Priority = Priority.job;
+        m_Priority = Priority.formation;
         Transform formationPosition = _formation.RegisterSoldierToFormation(m_FormationState.m_SoldierData);
         m_FormationState.SetFormation(_formation);
         m_FormationState.SetFormationPosition(formationPosition);
@@ -120,5 +168,15 @@ public class GroupAIManager : MonoBehaviour
         m_Priority = Priority.action;
         m_CoverAttackState.m_SoldierData.SetTarget(_target);
         SetState(m_CoverAttackState);
+    }
+
+    private void OnDrawGizmos()
+    {
+        if(m_CurrentState == m_WalkToTarget)
+        {
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawWireCube(m_WalkToTarget.GetWalkTarget(), Vector3.one);
+            Handles.Label(m_WalkToTarget.GetWalkTarget(), gameObject.name);
+        }
     }
 }

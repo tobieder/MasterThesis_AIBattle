@@ -14,6 +14,8 @@ public class ObstacleAgent : MonoBehaviour
     private NavMeshAgent m_Agent;
     private NavMeshObstacle m_Obstacle;
 
+    private GroupAIManager m_GroupAIManager;
+
     private float m_LastMoveTime;
     private Vector3 m_LastPosition;
 
@@ -21,6 +23,8 @@ public class ObstacleAgent : MonoBehaviour
     {
         m_Agent = GetComponent<NavMeshAgent>();
         m_Obstacle = GetComponent<NavMeshObstacle>();
+
+        m_GroupAIManager = GetComponent<GroupAIManager>();
 
         m_Obstacle.enabled = false;
         m_Obstacle.carveOnlyStationary = false;
@@ -31,13 +35,21 @@ public class ObstacleAgent : MonoBehaviour
 
     private void Update()
     {
-        if(Vector3.Distance(m_LastPosition, transform.position) > m_CarvingMoveThreshold)
+        if(m_GroupAIManager.m_CurrentState == m_GroupAIManager.m_MoveToCoverState ||
+            m_GroupAIManager.m_CurrentState == m_GroupAIManager.m_MoveToGuardSpotState ||
+            m_GroupAIManager.m_CurrentState == m_GroupAIManager.m_WalkToTarget
+            )
+        {
+            return;
+        }
+
+        if (Vector3.Distance(m_LastPosition, transform.position) > m_CarvingMoveThreshold)
         {
             m_LastMoveTime = Time.time;
             m_LastPosition = transform.position;
         }
 
-        if(m_LastMoveTime + m_CarvingTime < Time.time)
+        if (m_LastMoveTime + m_CarvingTime < Time.time)
         {
             m_Agent.enabled = false;
             m_Obstacle.enabled = true;

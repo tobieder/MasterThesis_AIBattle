@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 4326231928762843601}
   - component: {fileID: 4326231928762843600}
   - component: {fileID: 4326231928762843599}
-  m_Layer: 0
+  - component: {fileID: 6800563983351209606}
+  m_Layer: 2
   m_Name: 3_Units_ArrowFormation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -61,12 +62,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d8065e8ab6522449a68ec02126179f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Target: {fileID: 0}
+  m_Target: {x: 0, y: 0, z: 0}
   m_MoveSpeed: 3
   m_FormationPositions:
   - {fileID: 4326231929465171612}
   - {fileID: 4326231929855269084}
   - {fileID: 4326231929405508191}
+--- !u!195 &6800563983351209606
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4326231928762843598}
+  m_Enabled: 1
+  m_AgentTypeID: 1479372276
+  m_Radius: 0.2
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 45
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 0.001
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 0
 --- !u!1 &4326231929405508190
 GameObject:
   m_ObjectHideFlags: 0
@@ -78,7 +101,7 @@ GameObject:
   - component: {fileID: 4326231929405508191}
   - component: {fileID: 4326231929405508513}
   - component: {fileID: 4326231929405508512}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -93,7 +116,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4326231929405508190}
   m_LocalRotation: {x: 0, y: 0.19509031, z: 0, w: 0.98078537}
-  m_LocalPosition: {x: 2, y: 0, z: -1.5}
+  m_LocalPosition: {x: 1.5, y: 0, z: -1.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -161,7 +184,7 @@ GameObject:
   - component: {fileID: 4326231929465171612}
   - component: {fileID: 4326231929465171614}
   - component: {fileID: 4326231929465171613}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Tip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -244,7 +267,7 @@ GameObject:
   - component: {fileID: 4326231929855269084}
   - component: {fileID: 4326231929855269086}
   - component: {fileID: 4326231929855269085}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -259,7 +282,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4326231929855269083}
   m_LocalRotation: {x: 0, y: -0.19509031, z: 0, w: 0.98078537}
-  m_LocalPosition: {x: -2, y: 0, z: -1.5}
+  m_LocalPosition: {x: -1.5, y: 0, z: -1.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

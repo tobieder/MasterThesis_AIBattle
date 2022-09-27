@@ -16,7 +16,7 @@ public class GuardSpot : MonoBehaviour
         }
         else
         {
-            Gizmos.color = Color.green;
+            Gizmos.color = Color.blue;
         }
 
         Gizmos.DrawWireSphere(transform.position, 0.5f);

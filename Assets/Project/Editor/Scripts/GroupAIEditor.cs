@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEditor;
-using Unity.EditorCoroutines.Editor;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.AI;
@@ -10,19 +9,6 @@ using NUnit.Framework;
 [CustomEditor(typeof(GroupAI))]
 public class GroupAIEditor : Editor
 {
-    IEnumerator AttachSoldiersToFormation(int _index)
-    {
-        GroupAI groupAI = (GroupAI)target;
-
-        yield return new WaitForSeconds(1);
-
-        groupAI.SetFormationState(groupAI.m_Team[_index], groupAI.m_CurrentFormation);
-        _index = (_index + 1) % groupAI.m_Team.Count;
-        groupAI.SetFormationState(groupAI.m_Team[_index], groupAI.m_CurrentFormation);
-        _index = (_index + 1) % groupAI.m_Team.Count;
-        groupAI.SetFormationState(groupAI.m_Team[_index], groupAI.m_CurrentFormation);
-    }
-
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
@@ -42,11 +28,15 @@ public class GroupAIEditor : Editor
         {
             int randIndex = Random.Range(0, groupAI.m_Team.Count - 1);
 
-            GameObject formation = Instantiate(groupAI.m_ArrowFormation3, groupAI.m_Team[randIndex].transform.position, groupAI.m_Team[randIndex].transform.rotation);
+            GameObject formation = Instantiate(groupAI.m_ArrowFormation3, groupAI.m_Team[randIndex].transform.position, groupAI.m_Team[randIndex].transform.rotation, groupAI.m_SoldierSpawner.transform);
             groupAI.m_CurrentFormation = formation.GetComponent<Formation>();
             groupAI.m_CurrentFormation.SetTarget(new Vector3(0, 0, 0));
 
-            EditorCoroutineUtility.StartCoroutine(AttachSoldiersToFormation(randIndex), this);
+            groupAI.SetFormationState(groupAI.m_Team[randIndex], groupAI.m_CurrentFormation);
+            randIndex = (randIndex + 1) % groupAI.m_Team.Count;
+            groupAI.SetFormationState(groupAI.m_Team[randIndex], groupAI.m_CurrentFormation);
+            randIndex = (randIndex + 1) % groupAI.m_Team.Count;
+            groupAI.SetFormationState(groupAI.m_Team[randIndex], groupAI.m_CurrentFormation);
         }
 
         if(POIManager.Instance != null)
@@ -79,7 +69,7 @@ public class GroupAIEditor : Editor
                         }
 
                         soldierGroup.BeginAssembleSoldiers();
-                        groupAI.m_SoldierGroups.Add(soldierGroup);
+                        //groupAI.GetCapturePOISoldierGroup() = soldierGroup;
                     }
                 }
                 else
@@ -156,19 +146,19 @@ public class GroupAIEditor : Editor
                 if(soldier.IsInCover())
                 {
                     // Attack from cover
-                    groupAI.SetCoverAttackState(soldier, groupAI.m_VisibleEnemies[0]);
+                    groupAI.SetCoverAttackState(soldier, groupAI.GetVisibleSoldiers()[0]);
                 }
                 else
                 {
                     // Open ground attack
-                    groupAI.SetAttackState(soldier, groupAI.m_VisibleEnemies[0]);
+                    groupAI.SetAttackState(soldier, groupAI.GetVisibleSoldiers()[0]);
                 }
             }
 
             if (GUILayout.Button("Move To Cover"))
             {
                 CoverManager.Instance.ExitCover(soldier.GetCurrentCoverSpot());
-                groupAI.SetMoveToCoverState(soldier, CoverManager.Instance.GetCoverForClosestEnemies(soldier, groupAI.m_VisibleEnemies.ToArray(), 100, 1, soldier.GetCurrentCoverSpot()));
+                groupAI.SetMoveToCoverState(soldier, CoverManager.Instance.GetCoverForClosestEnemies(soldier, groupAI.GetVisibleSoldiers().ToArray(), 100, 1, soldier.GetCurrentCoverSpot()));
             }
         }
     }

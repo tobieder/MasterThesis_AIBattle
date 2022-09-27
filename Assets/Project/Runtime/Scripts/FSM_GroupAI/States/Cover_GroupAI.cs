@@ -6,6 +6,7 @@ public class Cover_GroupAI : GroupAIState
 {
     public override GroupAIState RunCurrentState()
     {
+        m_SoldierData.SetGuardAnimation(false);
         m_SoldierData.SetWalkAnimation(false);
         m_SoldierData.SetCrouchAnimation(true);
 

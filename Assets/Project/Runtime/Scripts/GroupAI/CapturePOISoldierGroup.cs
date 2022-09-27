@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public enum CapturePOIStatus
 {
@@ -39,6 +40,19 @@ public class CapturePOISoldierGroup
         soldiers.Add(_soldier);
     }
 
+    public void RegisterSoldiers(List<Soldier> _soldiers)
+    {
+        foreach(Soldier soldier in _soldiers)
+        {
+            RegisterSoldier(soldier);
+        }
+    }
+
+    public void DeregisterSoldier(Soldier _soldier)
+    {
+        soldiers.Remove(_soldier);
+    }
+
     public void BeginAssembleSoldiers()
     {
         List<AssemblySpot> assemblySpots = m_TargetPOI.GetAssemblySpots();
@@ -50,7 +64,16 @@ public class CapturePOISoldierGroup
             Vector3 position = new Vector3(InfluenceMapControl.Instance.transform.position.x + randPos.x, 0.0f, InfluenceMapControl.Instance.transform.position.x + randPos.y);
             soldier.GetComponent<GroupAIManager>().SetWalkToTargetState(position, Priority.job);
             m_AssignedAssemblySpots.Add(soldier, assemblySpots[counter % assemblySpots.Count]);
+            m_AssignedWalkTargets.Add(soldier, position);
             counter++;
+        }
+    }
+
+    public void AssembleSoldiers()
+    {
+        foreach (KeyValuePair<Soldier, Vector3> assignedWalkTarget in m_AssignedWalkTargets)
+        {
+            assignedWalkTarget.Key.GetComponent<GroupAIManager>().SetWalkToTargetState(assignedWalkTarget.Value, Priority.job);
         }
     }
 
@@ -62,7 +85,7 @@ public class CapturePOISoldierGroup
         {
             Vector3 position = m_TargetPOI.GetRandomWalkableUnoocupiedOrEnemyPosition(soldier.GetComponent<Team>().GetTeamNumber());
             soldier.GetComponent<GroupAIManager>().SetWalkToTargetState(position, Priority.job);
-            m_AssignedWalkTargets.Add(soldier, position);
+            m_AssignedWalkTargets[soldier] = position;
         }
 
         if(smm != null)
@@ -90,9 +113,9 @@ public class CapturePOISoldierGroup
                             if (Vector3.Distance(soldier.transform.position, m_AssignedWalkTargets[soldier]) < 0.5f)
                             {
                                 Vector3 position = m_TargetPOI.GetRandomWalkableUnoocupiedOrEnemyPosition(soldier.GetComponent<Team>().GetTeamNumber());
-                                soldier.GetComponent<GroupAIManager>().SetWalkToTargetState(position, Priority.job);
                                 m_AssignedWalkTargets[soldier] = position;
                             }
+                            soldier.GetComponent<GroupAIManager>().SetWalkToTargetState(m_AssignedWalkTargets[soldier], Priority.job);
                         }
                     }
                     else
@@ -100,9 +123,10 @@ public class CapturePOISoldierGroup
                         if (Vector3.Distance(soldier.transform.position, m_AssignedWalkTargets[soldier]) < 0.5f)
                         {
                             Vector3 position = m_TargetPOI.GetRandomWalkableUnoocupiedOrEnemyPosition(soldier.GetComponent<Team>().GetTeamNumber());
-                            soldier.GetComponent<GroupAIManager>().SetWalkToTargetState(position, Priority.job);
+                            //soldier.GetComponent<GroupAIManager>().SetWalkToTargetState(position, Priority.job);
                             m_AssignedWalkTargets[soldier] = position;
                         }
+                        soldier.GetComponent<GroupAIManager>().SetWalkToTargetState(m_AssignedWalkTargets[soldier], Priority.job);
                     }
                 }
             }
@@ -122,9 +146,9 @@ public class CapturePOISoldierGroup
                             if (Vector3.Distance(soldier.transform.position, m_AssignedWalkTargets[soldier]) < 0.5f)
                             {
                                 Vector3 position = m_TargetPOI.GetRandomWalkablePosition();
-                                soldier.GetComponent<GroupAIManager>().SetWalkToTargetState(position, Priority.job);
                                 m_AssignedWalkTargets[soldier] = position;
                             }
+                            soldier.GetComponent<GroupAIManager>().SetWalkToTargetState(m_AssignedWalkTargets[soldier], Priority.job);
                         }
                     }
                     else
@@ -132,9 +156,9 @@ public class CapturePOISoldierGroup
                         if (Vector3.Distance(soldier.transform.position, m_AssignedWalkTargets[soldier]) < 0.5f)
                         {
                             Vector3 position = m_TargetPOI.GetRandomWalkablePosition();
-                            soldier.GetComponent<GroupAIManager>().SetWalkToTargetState(position, Priority.job);
                             m_AssignedWalkTargets[soldier] = position;
                         }
+                        soldier.GetComponent<GroupAIManager>().SetWalkToTargetState(m_AssignedWalkTargets[soldier], Priority.job);
                     }
                 }
             }

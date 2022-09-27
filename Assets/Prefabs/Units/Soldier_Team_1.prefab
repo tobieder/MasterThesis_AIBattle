@@ -199,7 +199,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3de6d4843243f5144ad8676ec86eb9d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Controller: 0
+  m_Controller: 1
   m_GroupAI: {fileID: 0}
 --- !u!114 &6810330326170904945
 MonoBehaviour:
@@ -295,8 +295,8 @@ MonoBehaviour:
   m_WalkToTarget: {fileID: 520164534798432221}
   m_FormationState: {fileID: 7043692752230755980}
   m_AttackState: {fileID: 4666439630306206548}
-  m_MoveToGuardSpotState: {fileID: 0}
-  m_GuardGroupAI: {fileID: 0}
+  m_MoveToGuardSpotState: {fileID: 3518581904138843730}
+  m_GuardGroupAI: {fileID: 6929724149084930590}
   m_MoveToCoverState: {fileID: 4033653039181480075}
   m_CoverState: {fileID: 8355979766848215360}
   m_CoverAttackState: {fileID: 3173574001170287824}
@@ -449,7 +449,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: b04e284c717d33545892cf02e041826f, type: 2}
+  - {fileID: 2100000, guid: b414d28b36c4eed44aced72c020fb1d1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2293,7 +2293,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_SoldierData: {fileID: 6810330326170904945}
   m_IdleState: {fileID: 2053090666656326782}
-  m_GuardState: {fileID: 0}
+  m_GuardState: {fileID: 6929724149084930590}
 --- !u!1 &7301145339972675274
 GameObject:
   m_ObjectHideFlags: 0
@@ -2670,6 +2670,7 @@ MonoBehaviour:
   m_SoldierData: {fileID: 6810330326170904945}
   m_IdleState: {fileID: 2053090666656326782}
   m_WalkTarget: {x: 0, y: 0, z: 0}
+  m_Timer: 0
 --- !u!1 &9039326451513528784
 GameObject:
   m_ObjectHideFlags: 0

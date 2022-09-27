@@ -9,6 +9,7 @@ public class MoveToCover_GroupAI : GroupAIState
 
     public override GroupAIState RunCurrentState()
     {
+        m_SoldierData.SetGuardAnimation(false);
         m_SoldierData.SetWalkAnimation(true);
 
         CoverSpot currentCoverSpot = m_SoldierData.GetCurrentCoverSpot();
@@ -25,7 +26,7 @@ public class MoveToCover_GroupAI : GroupAIState
             else
             {
                 // Cover spot reached
-                Debug.Log(m_SoldierData.name + " has reached its cover spot.");
+                //Debug.Log(m_SoldierData.name + " has reached its cover spot.");
                 return m_CoverState;
             }
         }

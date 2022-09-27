@@ -21,7 +21,10 @@ public class SoldierController : MonoBehaviour
 
     private void Start()
     {
-        m_GroupAI.RegisterSoldier(GetComponent<Soldier>());
+        if(m_GroupAI != null)
+        {
+            m_GroupAI.RegisterSoldier(GetComponent<Soldier>());
+        }
 
         m_StateManager = GetComponent<StateManager>();
         m_GroupAIManager = GetComponent<GroupAIManager>();
@@ -35,11 +38,19 @@ public class SoldierController : MonoBehaviour
                 m_StateManager.RunStateMachine();
                 break;
             case Controller.GroupAI:
-                m_GroupAIManager.Run();
+                if(m_GroupAI != null)
+                {
+                    m_GroupAIManager.Run();
+                }
                 break;
             case Controller.STOP:
                 break;
         }
+    }
+
+    public void SetGroupAI(GroupAI _groupAI)
+    {
+        m_GroupAI = _groupAI;
     }
 
     public void SetControlMethod(Controller _controlMethod)

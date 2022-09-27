@@ -172,22 +172,10 @@ public class InfluenceMap : GridData
 
                 if (Mathf.Abs(minInfluence) > maxInfluence)
                 {
-                    /*
-                    if(Mathf.Abs(minInfluence) > Mathf.Abs(m_InfluencesBuffer[x, y]) || minInfluence < m_InfluencesBuffer[x, y])
-                    {
-                        m_Influences[x, y] = Mathf.Lerp(m_InfluencesBuffer[x, y], minInfluence, Momentum);
-                    }
-                    */
                     m_Influences[x, y] = Mathf.Lerp(m_InfluencesBuffer[x, y], minInfluence, Momentum);
                 }
                 else if(Mathf.Abs(minInfluence) < maxInfluence)
                 {
-                    /*
-                    if (Mathf.Abs(maxInfluence) > Mathf.Abs(m_InfluencesBuffer[x, y]) || maxInfluence > m_InfluencesBuffer[x, y])
-                    {
-                        m_Influences[x, y] = Mathf.Lerp(m_InfluencesBuffer[x, y], maxInfluence, Momentum);
-                    }
-                    */
                     m_Influences[x, y] = Mathf.Lerp(m_InfluencesBuffer[x, y], maxInfluence, Momentum);
                 }
                 else

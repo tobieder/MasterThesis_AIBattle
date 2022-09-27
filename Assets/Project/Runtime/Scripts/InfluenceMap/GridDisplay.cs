@@ -102,6 +102,7 @@ public class GridDisplay : MonoBehaviour
         m_MeshRenderer = gameObject.AddComponent<MeshRenderer>();
 
         m_MeshFilter.mesh = m_Mesh;
+		m_Material.color = new Color(1.0f, 1.0f, 1.0f, 0.1f);
         m_MeshRenderer.material = m_Material;
 
         float objectHeight = transform.position.y;

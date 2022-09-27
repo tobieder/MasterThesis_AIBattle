@@ -9,6 +9,7 @@ public class MoveToGuardSpot_GroupAI : GroupAIState
 
     public override GroupAIState RunCurrentState()
     {
+        m_SoldierData.SetGuardAnimation(false);
         m_SoldierData.SetWalkAnimation(true);
 
         GuardSpot currentGuardSpot = m_SoldierData.GetCurrentGuardSpot();

@@ -21,9 +21,11 @@ public class Attack_GroupAI : GroupAIState
         if(target == null)
         {
             Debug.LogWarning("No target");
+            return m_IdleState;
             // TODO: return to prev state??
         }
 
+        m_SoldierData.SetGuardAnimation(false);
         m_SoldierData.SetWalkAnimation(false);
         m_SoldierData.transform.LookAt(target.transform);
 

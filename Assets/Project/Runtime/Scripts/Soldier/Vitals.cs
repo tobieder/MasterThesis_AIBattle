@@ -17,6 +17,11 @@ public class Vitals : MonoBehaviour
         m_Health = m_MaxHealth;
     }
 
+    public void SetupHealthBar(Canvas _canvas)
+    {
+        m_HealthBar.transform.SetParent(_canvas.transform);
+    }
+
     public float GetHealth()
     {
         return m_Health;
@@ -37,8 +42,8 @@ public class Vitals : MonoBehaviour
         }
     }
 
-    public void SetupHealthBar(Canvas _canvas)
+    public ProgressBar GetHealthBar()
     {
-        m_HealthBar.transform.SetParent(_canvas.transform);
+        return m_HealthBar;
     }
 }
