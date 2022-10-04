@@ -6,34 +6,34 @@ public class CoverState : State
 {
     public RoamAreaState m_RoamAreaState;
     public GetCoverState m_GetCoverState;
-    public AttackState m_AttackState;
+    public CoverAttackState m_CoverAttackState;
 
     public override State RunCurrentState()
     {
         m_SoldierData.SetWalkAnimation(false);
-
-        m_SoldierData.transform.localScale = new Vector3(1.0f, 0.5f, 1.0f);
+        m_SoldierData.SetCrouchAnimation(true);
 
         if(m_SoldierData.GetTarget() != null)
         {
+            m_SoldierData.transform.LookAt(m_SoldierData.GetTarget().transform);
+
             if (m_SoldierData.ReadyToChangeCover())
             {
-                m_SoldierData.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+                m_SoldierData.SetCrouchAnimation(false);
                 return m_GetCoverState;
             }
 
             if (m_SoldierData.ReadyToFire())
             {
-                m_SoldierData.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+                m_SoldierData.SetCrouchAnimation(false);
 
-                m_AttackState.SetPreviousState(this);
-                m_AttackState.SetNextState(this);
-                return m_AttackState;
+                return m_CoverAttackState;
             }
         }
         else
         {
-            m_SoldierData.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+            m_SoldierData.SetCrouchAnimation(false);
+            CoverManager.Instance.ExitCover(m_SoldierData.GetCurrentCoverSpot());
             return m_RoamAreaState;
         }
 

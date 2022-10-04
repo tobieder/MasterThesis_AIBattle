@@ -34,9 +34,12 @@ public class Formation : MonoBehaviour
     {
         // Target not yet set
         if (m_Target == null)
+        {
+            Debug.LogWarning(gameObject.name + " no target set.");
             return;
+        }
 
-        if(Vector3.Distance(transform.position, m_Target) <= 1.0f)
+        if(Vector3.Distance(transform.position, m_Target) <= 2.0f)
         {
             // Arrived at target -> destroy formation (Soldiers will automatically move to idle state)
             Destroy(gameObject);
@@ -46,74 +49,34 @@ public class Formation : MonoBehaviour
             if(AreAllUnitsInPosition(2.0f))
             {
                 m_NavMeshAgent.isStopped = false;
-                m_NavMeshAgent.SetDestination(m_Target);
-
-                float maxDistance = 0.0f;
-                foreach(Transform position in m_FormationPositions)
+                if(m_NavMeshAgent.SetDestination(m_Target))
                 {
-                    float currDistance = DistanceSoldierToAssignedPosition(position);
-
-                    if(currDistance > maxDistance)
+                    float maxDistance = 0.0f;
+                    foreach (Transform position in m_FormationPositions)
                     {
-                        maxDistance = currDistance;
+                        float currDistance = DistanceSoldierToAssignedPosition(position);
+
+                        if (currDistance > maxDistance)
+                        {
+                            maxDistance = currDistance;
+                        }
+                    }
+
+                    if (maxDistance > 0.75f)
+                    {
+                        m_NavMeshAgent.speed = m_MoveSpeed * ((2.0f - maxDistance) / (2.0f - 0.75f));
                     }
                 }
-
-                if(maxDistance > 0.75f)
+                else
                 {
-                    m_NavMeshAgent.speed = m_MoveSpeed * ((2.0f - maxDistance) / (2.0f - 0.75f));
+                    // No path possible
+                    Destroy(gameObject);
                 }
             }
             else
             {
                 m_NavMeshAgent.isStopped = true;
             }
-
-            /*
-            if(AreAllUnitsInPosition(2.0f))
-            {
-                if(m_CurrentPath == null)
-                {
-                    m_CurrentPath = CalculatePath(transform.position, m_Target);
-                }
-                else
-                {
-                    Vector3 nodePosition = m_CurrentPath.GetNextNode();
-                    if(Vector3.Distance(transform.position, nodePosition) < 0.5f)
-                    {
-                        m_CurrentPath.m_CurrentPathIndex++;
-                    }
-                    else
-                    {
-                        transform.LookAt(nodePosition);
-                        if(AreAllUnitsInPosition(0.75f))
-                        {
-                            transform.Translate(Vector3.forward * m_MoveSpeed * Time.deltaTime);
-                        }
-                        else
-                        {
-                            transform.Translate(Vector3.forward * m_MoveSpeed * 0.25f * Time.deltaTime);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                if(m_CurrentPath != null)
-                {
-                    Vector3 nodePosition = m_CurrentPath.GetNextNode();
-                    if (Vector3.Distance(transform.position, nodePosition) < 0.5f)
-                    {
-                        m_CurrentPath.m_CurrentPathIndex++;
-                    }
-                    else
-                    {
-                        transform.LookAt(nodePosition);
-                        transform.Translate(Vector3.forward * m_MoveSpeed * 0.25f * Time.deltaTime);
-                    }
-                }
-            }
-            */
         }
     }
 
@@ -187,12 +150,9 @@ public class Formation : MonoBehaviour
         return Vector3.Distance(_position.position, m_FormationOccupancy[_position].transform.position);
     }
 
-    Path CalculatePath(Vector3 _source, Vector3 _destination)
+    public List<Soldier> GetFormationSoldiers()
     {
-        NavMeshPath path = new NavMeshPath();
-        NavMesh.CalculatePath(_source, _destination, NavMesh.AllAreas, path);
-
-        return new Path(path.corners);
+        return new List<Soldier>(m_FormationOccupancy.Values);
     }
 
     private void OnDrawGizmos()

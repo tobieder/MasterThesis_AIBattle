@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class CoverManager : MonoBehaviour
 {
@@ -146,6 +147,43 @@ public class CoverManager : MonoBehaviour
         }
 
         return bestCover;
+    }
+
+    public CoverSpot GetClosestCoverToPosition(Soldier _soldier, Vector3 _position)
+    {
+        CoverSpot closestCover = null;
+        float currentsqrMinDistance = float.PositiveInfinity;
+
+        CoverSpot[] possibleCoverSpots = m_UnoccupiedCoverSpots.ToArray();
+
+        for (int i = 0; i < possibleCoverSpots.Length; i++)
+        {
+            if(closestCover == null)
+            {
+                closestCover = possibleCoverSpots[i];
+                currentsqrMinDistance = (possibleCoverSpots[i].transform.position - _position).sqrMagnitude;
+            }
+            else
+            {
+                CoverSpot currentCoverSpot = possibleCoverSpots[i];
+                float currentsqrDistance = (currentCoverSpot.transform.position - _position).sqrMagnitude;
+                
+                if(currentsqrDistance < currentsqrMinDistance)
+                {
+                    closestCover = currentCoverSpot;
+                    currentsqrMinDistance = currentsqrDistance;
+                }
+            }
+        }
+
+        if (closestCover != null)
+        {
+            ExitCover(_soldier.GetCurrentCoverSpot());
+            closestCover.SetOccupier(_soldier.transform);
+            AddToOccupied(closestCover);
+        }
+
+        return closestCover;
     }
 
     public void ExitCover(CoverSpot _coverSpot)

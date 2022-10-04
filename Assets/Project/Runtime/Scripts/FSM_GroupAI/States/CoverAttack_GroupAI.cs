@@ -31,7 +31,7 @@ public class CoverAttack_GroupAI : GroupAIState
 
         m_SoldierData.TriggerShotAnimation();
 
-        float maxDeviation = 0.75f;
+        float maxDeviation = m_SoldierData.GetDeviation(); ;
         Vector3 deviation3D = Random.insideUnitCircle * maxDeviation;
         Vector3 direction = m_SoldierData.GetTarget().GetEyes().position - m_SoldierData.GetEyes().position;
         Quaternion rot = Quaternion.LookRotation(Vector3.forward * m_SoldierData.GetMaxAttackDistance() + deviation3D);
@@ -49,7 +49,7 @@ public class CoverAttack_GroupAI : GroupAIState
             //Check if hit == target
             if (hit.transform.gameObject == target.gameObject)
             {
-                target.GetComponent<Vitals>().Hit(m_SoldierData.GetDamage());
+                target.GetComponent<Vitals>().Hit(m_SoldierData.GetDamage(), m_SoldierData.transform);
             }
             else
             {

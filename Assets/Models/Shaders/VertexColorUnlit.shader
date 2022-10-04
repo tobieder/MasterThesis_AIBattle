@@ -5,25 +5,25 @@ Shader "Unlit/VertexColorUnlit"
         _MainTex("Texture", 2D) = "white" {}
     }
 
-    Category
+        Category
     {
         Tags { "Queue" = "Geometry" }
         Lighting Off
 
-        BindChannels 
+        BindChannels
         {
             Bind "Color", color
             Bind "Vertex", vertex
             Bind "TexCoord", texcoord
         }
 
-        SubShader 
+        SubShader
         {
-            Pass 
+            Pass
         {
         Blend SrcAlpha OneMinusSrcAlpha
 
-        SetTexture[_MainTex] 
+        SetTexture[_MainTex]
         {
                     Combine texture * primary
                 }

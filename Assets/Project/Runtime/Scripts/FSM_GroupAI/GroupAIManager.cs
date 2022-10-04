@@ -18,6 +18,7 @@ public class GroupAIManager : MonoBehaviour
     public GroupAIState m_CurrentState;
 
     public Idle_GroupAI m_IdleState;
+    public Wait_GroupAI m_WaitState;
     public WalkToTarget_GroupAI m_WalkToTarget;
     public Formation_GroupAI m_FormationState;
     public Attack_GroupAI m_AttackState;
@@ -48,6 +49,11 @@ public class GroupAIManager : MonoBehaviour
 
         if(nextState != null && nextState != m_CurrentState)
         {
+            if(m_CurrentState == m_GuardGroupAI)
+            {
+                m_CurrentState.m_SoldierData.GetCurrentGuardSpot().SetOccupier(null);
+            }
+
             SetState(nextState);
         }
     }
@@ -176,7 +182,7 @@ public class GroupAIManager : MonoBehaviour
         {
             Gizmos.color = Color.cyan;
             Gizmos.DrawWireCube(m_WalkToTarget.GetWalkTarget(), Vector3.one);
-            Handles.Label(m_WalkToTarget.GetWalkTarget(), gameObject.name);
+            //Handles.Label(m_WalkToTarget.GetWalkTarget(), gameObject.name);
         }
     }
 }

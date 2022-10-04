@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 33139875544622906}
   - component: {fileID: 23728004125838228}
   - component: {fileID: 1481212869995925298}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Sandbag_Wall_Straight_LOD3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -108,7 +108,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4155437571745606}
   - component: {fileID: 205154780261709144}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Sandbag Wall Straight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -178,7 +178,7 @@ GameObject:
   - component: {fileID: 33832350252781468}
   - component: {fileID: 23536100975389236}
   - component: {fileID: 1799941911881231027}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Sandbag_Wall_Straight_LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -276,7 +276,7 @@ GameObject:
   - component: {fileID: 33275278004401416}
   - component: {fileID: 23374893107300244}
   - component: {fileID: 1004470691570440290}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Sandbag_Wall_Straight_LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -374,7 +374,7 @@ GameObject:
   - component: {fileID: 33399042839839546}
   - component: {fileID: 23114679828988014}
   - component: {fileID: 2634309137628283289}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Sandbag_Wall_Straight_LOD2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -470,7 +470,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3561372874310247065}
   - component: {fileID: 409944245568472401}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: coverSpot (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -515,7 +515,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4985552261537533851}
   - component: {fileID: 5379939412750419106}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: coverSpot (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -560,7 +560,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7081638788517062645}
   - component: {fileID: 4267873213395084973}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: coverSpot (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -605,7 +605,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7594825590866585099}
   - component: {fileID: 3618081253455481404}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: coverSpot (9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -650,7 +650,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8470418723030350087}
   - component: {fileID: 3655769451988827640}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: coverSpot (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -694,7 +694,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1582331283692317364}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Cover
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -736,7 +736,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4198634899787361394}
   - component: {fileID: 3242436580345332004}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: coverSpot (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -781,7 +781,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2430107471015096575}
   - component: {fileID: 7247398885223228354}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: coverSpot (10)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -826,7 +826,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1114610591752041992}
   - component: {fileID: 1271717950911636492}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: coverSpot (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -871,7 +871,7 @@ GameObject:
   m_Component:
   - component: {fileID: 862888687935356179}
   - component: {fileID: 7147805580709847028}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: coverSpot (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -916,7 +916,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3408006220170643086}
   - component: {fileID: 3460241436673882224}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: coverSpot (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

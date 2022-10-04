@@ -5,6 +5,7 @@ using UnityEngine;
 public class AttackState : State
 {
     State m_PreviousState;
+    State m_NextState;
     public WaitState m_WaitState;
 
     public override State RunCurrentState()
@@ -22,6 +23,7 @@ public class AttackState : State
 
         if(!m_SoldierData.IsTargetVisible())
         {
+            m_WaitState.SetNextState(this);
             m_WaitState.SetTimer(0.25f);
             return m_WaitState;
             //return this;
@@ -31,7 +33,7 @@ public class AttackState : State
 
         m_SoldierData.ResetPathfinding();
 
-        float maxDeviation = 0.75f;
+        float maxDeviation = m_SoldierData.GetDeviation();
         Vector3 deviation3D = Random.insideUnitCircle * maxDeviation;
         Vector3 direction = m_SoldierData.GetTarget().GetEyes().position - m_SoldierData.GetEyes().position;
         Quaternion rot = Quaternion.LookRotation(Vector3.forward * m_SoldierData.GetMaxAttackDistance() + deviation3D);
@@ -49,7 +51,7 @@ public class AttackState : State
             //Check if hit == target
             if(hit.transform.gameObject == target.gameObject)
             {
-                target.GetComponent<Vitals>().Hit(m_SoldierData.GetDamage());
+                target.GetComponent<Vitals>().Hit(m_SoldierData.GetDamage(), m_SoldierData.transform);
             }
             else
             {
@@ -59,6 +61,7 @@ public class AttackState : State
 
         m_SoldierData.ResetFireCooldown();
 
+        m_WaitState.SetNextState(m_NextState);
         m_WaitState.SetTimer(0.5f);
         return m_WaitState;
     }
@@ -70,6 +73,6 @@ public class AttackState : State
 
     public void SetNextState(State _nextState)
     {
-        m_WaitState.SetNextState(_nextState);
+        m_NextState = _nextState;
     }
 }

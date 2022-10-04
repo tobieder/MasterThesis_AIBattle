@@ -43,6 +43,14 @@ public class InfluenceMapControl : MonoBehaviour
 
         CreateMap();
 
+        for(int x = 0; x < m_InfluenceMap.Width; x++)
+        {
+            for(int y = 0; y < m_InfluenceMap.Height; y++)
+            {
+                SetInfluence(x, y, -1f);
+            }
+        }
+
         InvokeRepeating("PropagationUpdate", 0.001f, 1.0f / m_UpdateFrequency);
     }
 
@@ -182,6 +190,21 @@ public class InfluenceMapControl : MonoBehaviour
 
         }
         return value / (float)counter;
+    }
+
+    // Returns average last influence value of specified area
+    public void SetLastInfluenceInArea(int _x, int _y, Vector2 size)
+    {
+        for (int x = _x; x < _x + size.x; x++)
+        {
+            for (int y = _y; y < _y + size.y; y++)
+            {
+                //m_InfluenceMap.SetLastInfluence(x, y, 1);
+
+                SetInfluence(x, y, 1.0f);
+            }
+
+        }
     }
 
     public bool AreAllValuesTheSame()

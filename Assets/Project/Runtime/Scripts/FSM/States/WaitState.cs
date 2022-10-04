@@ -10,6 +10,8 @@ public class WaitState : State
 
     public override State RunCurrentState()
     {
+        m_SoldierData.ResetPathfinding();
+
         if(m_NextState == null)
         {
             Debug.LogError("No next State set.");

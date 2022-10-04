@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor.PackageManager;
-using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -21,6 +19,7 @@ public class Soldier : MonoBehaviour
     [SerializeField] float m_MoveSpeed = 15.0f;
 
     [SerializeField] float m_DamageDealt = 25.0f;
+    [SerializeField] float m_Deviation = 0.75f;
     [SerializeField] float m_FireCooldown = 1.0f;
     private float m_currentFireCooldown = 0.0f;
 
@@ -29,6 +28,7 @@ public class Soldier : MonoBehaviour
 
     // Functionality
     public Transform m_Eyes;
+    public ParticleSystem m_WeaponEffect;
 
     // Internal
     private bool m_Dead = false;
@@ -87,11 +87,10 @@ public class Soldier : MonoBehaviour
                     if (Vector3.Distance(bestTarget.transform.position, transform.position) < m_ViewDistance)
                     {
                         // Check if enemy is in fov
-                        if(Vector3.Dot(bestTarget.transform.position - transform.position, transform.forward) > 0)
+                        if(Vector3.Dot(transform.forward, (bestTarget.transform.position - transform.position).normalized) >= Mathf.Cos(GetFieldOfView()))
                         {
-                            RaycastHit hit;
                             // Check for obstacles
-                            if (Physics.Raycast(m_Eyes.position, bestTarget.m_Eyes.position - m_Eyes.position, out hit, GetViewDistance()))
+                            if (Physics.Raycast(m_Eyes.position, (bestTarget.m_Eyes.position - m_Eyes.position).normalized, out RaycastHit hit, GetViewDistance()))
                             {
                                 if (hit.collider == bestTarget.GetComponent<Collider>())
                                 {
@@ -129,8 +128,7 @@ public class Soldier : MonoBehaviour
 
             if(m_CurrentGuardSpot != null)
             {
-                // TODO
-                //m_CurrentGuardSpot.
+                m_CurrentGuardSpot.SetOccupier(null);
             }
 
             m_Vitals.Die();
@@ -291,7 +289,9 @@ public class Soldier : MonoBehaviour
     public void ResetPathfinding()
     {
         m_WalkTargetSet = false;
-        if(m_NavMeshAgent.enabled)
+        //GetComponent<ObstacleAgent>().SetDestination(transform.position);
+
+        if (m_NavMeshAgent.enabled)
         {
             m_NavMeshAgent.isStopped = true;
             m_NavMeshAgent.ResetPath();
@@ -360,6 +360,7 @@ public class Soldier : MonoBehaviour
     public void TriggerShotAnimation()
     {
         m_Animator.SetTrigger("fire");
+        m_WeaponEffect.Play();
     }
 
     public void SetGuardAnimation(bool _state)
@@ -417,6 +418,11 @@ public class Soldier : MonoBehaviour
     public float GetDamage()
     {
         return m_DamageDealt;
+    }
+
+    public float GetDeviation()
+    {
+        return m_Deviation;
     }
 
     public bool ReadyToFire()

@@ -27,11 +27,13 @@ public class Vitals : MonoBehaviour
         return m_Health;
     }
 
-    public void Hit(float _damage)
+    public void Hit(float _damage, Transform _enemyPosition)
     {
         m_Health -= _damage;
 
         m_HealthBar.SetProgress(m_Health / m_MaxHealth, 3f);
+
+        transform.LookAt(_enemyPosition);
     }
 
     public void Die()

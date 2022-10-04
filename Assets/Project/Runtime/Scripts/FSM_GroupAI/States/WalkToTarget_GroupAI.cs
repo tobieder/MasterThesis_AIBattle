@@ -16,9 +16,10 @@ public class WalkToTarget_GroupAI : GroupAIState
     public override GroupAIState RunCurrentState()
     {
         m_SoldierData.SetGuardAnimation(false);
-        m_SoldierData.SetWalkAnimation(true);
+        m_SoldierData.SetCrouchAnimation(false);
+        m_SoldierData.SetWalkAnimation(false);
 
-        if(m_WalkTarget != m_SoldierData.GetWalkTarget() || Time.time - m_Timer >= m_ResetTimer)
+        if (m_WalkTarget != m_SoldierData.GetWalkTarget() || Time.time - m_Timer >= m_ResetTimer)
         {
             m_WalkTarget = m_SoldierData.GetWalkTarget();
             m_SoldierData.GetNavMeshAgent().SetDestination(m_WalkTarget);
@@ -27,10 +28,14 @@ public class WalkToTarget_GroupAI : GroupAIState
         }
 
         Vector3 distanceToDestination = transform.position - m_WalkTarget;
-        if(distanceToDestination.magnitude <= 1.0f)
+        if (distanceToDestination.magnitude <= 0.2f)
         {
             //Debug.Log(m_SoldierData.name + " has reached " + m_WalkTarget);
             return m_IdleState;
+        }
+        else
+        {
+            m_SoldierData.SetWalkAnimation(true);
         }
 
         return this;

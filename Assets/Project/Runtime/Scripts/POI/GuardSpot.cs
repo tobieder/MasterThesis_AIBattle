@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class GuardSpot : MonoBehaviour
 {
+    [SerializeField]
+    bool m_StayOnDuty = true;
+
     bool m_Occupied = false;
     Transform m_Occupier;
 
@@ -44,5 +47,10 @@ public class GuardSpot : MonoBehaviour
     public bool IsOccupied()
     {
         return m_Occupied;
+    }
+
+    public bool GetStayOnDuty()
+    {
+        return m_StayOnDuty;
     }
 }

@@ -60,6 +60,9 @@ public class SoldierController : MonoBehaviour
 
     private void OnDestroy()
     {
-        m_GroupAI.DeregisterSoldier(GetComponent<Soldier>());
+        if(m_GroupAI != null)
+        {
+            m_GroupAI.DeregisterSoldier(GetComponent<Soldier>());
+        }
     }
 }

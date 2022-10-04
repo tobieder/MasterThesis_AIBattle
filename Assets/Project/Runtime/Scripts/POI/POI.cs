@@ -37,7 +37,7 @@ public class POI : MonoBehaviour
 
         //Debug.Log(gameObject.name + ": (" + m_StartX + ", " + m_StartZ + ") -> (" + m_ExtentX + ", " + m_ExtentZ + ")");
 
-        Invoke("CalculateTeamOccupation", 5.0f);
+        InvokeRepeating("CalculateTeamOccupation", 5.0f, 1.0f);
 
         m_GuardSpots = new List<GuardSpot>(m_GuardSpotsHolder.GetComponentsInChildren<GuardSpot>());
         m_AssemblySpots = new List<AssemblySpot>(m_AssemblySpotsHolder.GetComponentsInChildren<AssemblySpot>());
@@ -159,6 +159,21 @@ public class POI : MonoBehaviour
         return m_GuardSpots;
     }
 
+    public List<GuardSpot> GetFreeGuardSpots()
+    {
+        List<GuardSpot> freeGuardSpots = new List<GuardSpot>();
+
+        foreach(GuardSpot gs in m_GuardSpots)
+        {
+            if(!gs.IsOccupied())
+            {
+                freeGuardSpots.Add(gs);
+            }
+        }
+
+        return freeGuardSpots;
+    }
+
     public List<AssemblySpot> GetAssemblySpots()
     {
         return m_AssemblySpots;
@@ -171,6 +186,6 @@ public class POI : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Handles.Label(transform.position, m_Influence.ToString("F2"));
+        //Handles.Label(transform.position, m_Influence.ToString("F2"));
     }
 }

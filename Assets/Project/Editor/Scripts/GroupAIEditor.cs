@@ -15,6 +15,7 @@ public class GroupAIEditor : Editor
 
         GroupAI groupAI = (GroupAI)target;
 
+        /*
         if (GUILayout.Button("Spawn Arrow Formation 3 at Random Unit"))
         {
             int randIndex = Random.Range(0, groupAI.m_Team.Count - 1);
@@ -38,6 +39,7 @@ public class GroupAIEditor : Editor
             randIndex = (randIndex + 1) % groupAI.m_Team.Count;
             groupAI.SetFormationState(groupAI.m_Team[randIndex], groupAI.m_CurrentFormation);
         }
+        */
 
         if(POIManager.Instance != null)
         {
@@ -68,7 +70,7 @@ public class GroupAIEditor : Editor
                             }
                         }
 
-                        soldierGroup.BeginAssembleSoldiers();
+                        soldierGroup.BeginAssembleSoldiers(groupAI);
                         //groupAI.GetCapturePOISoldierGroup() = soldierGroup;
                     }
                 }
@@ -119,7 +121,7 @@ public class GroupAIEditor : Editor
 
                     if (NavMesh.SamplePosition(walkTarget, out hit, 0.5f, NavMesh.AllAreas))
                     {
-                        groupAI.SetWalkTarget(soldier, walkTarget, Priority.low);
+                        groupAI.SetWalkToTargetState(soldier, walkTarget, Priority.low);
                         return;
                     }
                 }
@@ -130,9 +132,10 @@ public class GroupAIEditor : Editor
                 Vector2 walkTarget = InfluenceMapControl.Instance.GetClosestUnclaimedOrEnemyClaimed(new Vector2(soldier.transform.position.x, soldier.transform.position.z), soldier.GetComponent<Propagator>().Value);
                 Debug.Log(soldier.GetComponent<Propagator>().Value);
                 Debug.Log(soldier.transform.position + " -> " + walkTarget);
-                groupAI.SetWalkTarget(soldier, new Vector3(walkTarget.x, 0.0f, walkTarget.y), Priority.low);
+                groupAI.SetWalkToTargetState(soldier, new Vector3(walkTarget.x, 0.0f, walkTarget.y), Priority.low);
             }
 
+            /*
             if (GUILayout.Button("Register To Formation."))
             {
                 if(groupAI.m_CurrentFormation != null)
@@ -140,6 +143,7 @@ public class GroupAIEditor : Editor
                     groupAI.SetFormationState(soldier, groupAI.m_CurrentFormation);
                 }
             }
+            */
 
             if (GUILayout.Button("Attack Enemy"))
             {

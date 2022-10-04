@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3300000}
   - component: {fileID: 2300000}
   - component: {fileID: 6500000}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: RoadBlock_D
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -108,7 +108,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2301278862260068240}
   - component: {fileID: 1523643458063204600}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: coverSpot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -152,7 +152,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1407308914698557053}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Cover
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -188,7 +188,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8951394294817793845}
   - component: {fileID: 7700173545267784006}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: coverSpot (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -233,7 +233,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7929717601936173660}
   - component: {fileID: 5144449394834989340}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: coverSpot (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -278,7 +278,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2583316043687380133}
   - component: {fileID: 4207538529558163820}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: coverSpot (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

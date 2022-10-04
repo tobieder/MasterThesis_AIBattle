@@ -16,7 +16,7 @@ public class MoveToCover_GroupAI : GroupAIState
 
         if(currentCoverSpot != null)
         {
-            if(Vector3.Distance(m_SoldierData.transform.position, currentCoverSpot.transform.position) > 0.2f)
+            if(Vector3.Distance(m_SoldierData.transform.position, currentCoverSpot.transform.position) > 0.3f)
             {
                 // TODO: Allow for attack durin walk?
 
@@ -27,6 +27,7 @@ public class MoveToCover_GroupAI : GroupAIState
             {
                 // Cover spot reached
                 //Debug.Log(m_SoldierData.name + " has reached its cover spot.");
+                m_SoldierData.ResetCoverChangeCooldown();
                 return m_CoverState;
             }
         }

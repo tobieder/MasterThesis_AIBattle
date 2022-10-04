@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4221432865549344}
   - component: {fileID: 205317599857190240}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Barrier_Hesco_M
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -70,7 +70,7 @@ GameObject:
   - component: {fileID: 33927191926087468}
   - component: {fileID: 23919289532510924}
   - component: {fileID: 454826827535548359}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Barrier_Hesco_S_LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -168,7 +168,7 @@ GameObject:
   - component: {fileID: 33797281147923804}
   - component: {fileID: 23478568082658504}
   - component: {fileID: 8861969070846652113}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Barrier_Hesco_S_LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -264,7 +264,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2408135551565629570}
   - component: {fileID: 7496354135508486351}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: coverSpot (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -309,7 +309,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3037011647156006017}
   - component: {fileID: 4552247640852652342}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: coverSpot (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -353,7 +353,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4391799499706604027}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Cover
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -389,7 +389,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5444996284063767407}
   - component: {fileID: 8429861714798698393}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: coverSpot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -434,7 +434,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8463973959229357582}
   - component: {fileID: 7684972530944459838}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: coverSpot (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

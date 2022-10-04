@@ -16,6 +16,7 @@ public class ScriptedMovementManager : MonoBehaviour
     public void ResetScriptedMovement()
     {
         m_SubscribedSoldiers.Clear();
+        m_currentTacticalPoint = 0;
     }
 
     public bool Run()
@@ -35,10 +36,16 @@ public class ScriptedMovementManager : MonoBehaviour
                         allSoldiersAtCurrentTacticalPoint = false;
                     }
                 }
+
                 if (allSoldiersAtCurrentTacticalPoint)
                 {
                     m_currentTacticalPoint++;
                 }
+            }
+            else
+            {
+                // Request a new soldier
+                Debug.Log("Need a new soldier");
             }
 
             return false;
@@ -51,20 +58,17 @@ public class ScriptedMovementManager : MonoBehaviour
         }
     }
 
-    public void Subscribe(Soldier_Scripted _soldier)
-    {
-        if(m_SubscribedSoldiers.Count < m_SoldiersNeeded)
-        {
-            //m_SubscribedSoldiers.Add(_soldier);
-        }
-    }
-
     public void Subscribe(Soldier _soldier)
     {
-        if(m_SubscribedSoldiers.Count < m_SoldiersNeeded)
+        if(m_SubscribedSoldiers.Count < m_SoldiersNeeded && !m_SubscribedSoldiers.Contains(_soldier))
         {
             m_SubscribedSoldiers.Add(_soldier);
         }
+    }
+
+    public void Deregister(Soldier _solder)
+    {
+        m_SubscribedSoldiers.Remove(_solder);
     }
 }
 
